@@ -18,6 +18,10 @@ int main(){
         int map[x][y];
         int zeroCounter = rand()%4 + 2;
         vector<string> moves;
+        for (int i = 1; i < x; i++)
+            moves.push_back("Right");
+        for (int i = 1; i < y; i++)
+            moves.push_back("Down");
     }
     
 }
