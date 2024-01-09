@@ -12,7 +12,7 @@ int main(){
     string level;
     cin >> level;
     srand(time(0));
-    if (level == "Easy")
+    if (level == "Easy" || level == "easy")
     {
         int x, y, sum = 0;
         cout << "Enter x & y:" << endl;
@@ -77,7 +77,7 @@ int main(){
         {
             for (int j = 0; j < x; j++)
             {
-                cout << map[i][j] << "  ";
+                cout << map[i][j] << "\t";
             }
             cout << endl;
         }
