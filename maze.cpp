@@ -37,7 +37,6 @@ int main(){
                     map[i][j] = rand()%7-3;
             }
         }
-        
     }
     
 }
