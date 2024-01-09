@@ -25,6 +25,7 @@ int main(){
         for (int i = 1; i < y; i++)
             moves.push_back("Down");
         random_shuffle(moves.begin(), moves.end());
+        int test;
     }
     
 }
