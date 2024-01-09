@@ -25,9 +25,18 @@ int main(){
         for (int i = 1; i < y; i++)
             moves.push_back("Down");
         random_shuffle(moves.begin(), moves.end());
-        map[0][0] = rand()%7-3;
-        while (map[0][0] == 0)
-            map[0][0] = rand()%7-3;
+        // map[0][0] = rand()%7-3;
+        // while (map[0][0] == 0)
+        //     map[0][0] = rand()%7-3;
+        for (int i = 0; i < x; i++)
+        {
+            for (int j = 0; j < y; j++)
+            {
+                map[i][j] = rand()%7-3;
+                while (map[i][j] == 0)
+                    map[i][j] = rand()%7-3;
+            }
+        }
         
     }
     
