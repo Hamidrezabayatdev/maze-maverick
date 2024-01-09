@@ -16,7 +16,7 @@ int main(){
     {
         int x, y, sum = 0;
         cout << "Enter x & y:" << endl;
-        cin >> x >> y;
+        cin >> y >> x;
         int map[x][y];
         for (int i = 0; i < y; i++)
         {
@@ -29,9 +29,9 @@ int main(){
         int zeroCounter = rand()%4 + 2;
         vector<string> moves;
         for (int i = 1; i < y; i++)
-            moves.push_back("Right");
-        for (int i = 1; i < x; i++)
             moves.push_back("Down");
+        for (int i = 1; i < x; i++)
+            moves.push_back("Right");
         random_shuffle(moves.begin(), moves.end());
         // map[0][0] = rand()%7-3;
         // while (map[0][0] == 0)
@@ -47,9 +47,14 @@ int main(){
             // cout << pathNumbers[i] << " ";
             sum += tempNumber;
         }
-        map[x-1][y-1] = sum;
         map[0][0] = pathNumbers[0];
         int k = 0, i = 0, j = 0;
+        for (int i = 0; i < moves.size(); i++)
+            cout << moves[i] << "    ";
+        cout << endl << "_____________________" << endl;
+        for (int i = 0; i < pathNumbers.size(); i++)
+            cout << pathNumbers[i] << "    ";
+        cout << endl << "_____________________" << endl;
         while (k < moves.size())
         {
             if (moves[k] == "Right")
@@ -64,7 +69,10 @@ int main(){
                 k++;
                 map[i][j] = pathNumbers[k];
             }
+            if (i == y-1 && j == x-1)
+                break;
         }
+        map[y-1][x-1] = sum;
         for (int i = 0; i < y; i++)
         {
             for (int j = 0; j < x; j++)
@@ -73,27 +81,6 @@ int main(){
             }
             cout << endl;
         }
-        
-        
-        
-        // for (int i = 0; i < x; i++)
-        // {
-        //     for (int j = 0; j < y; j++)
-        //     {
-        //         map[i][j] = rand()%7-3;
-        //         while (map[i][j] == 0)
-        //             map[i][j] = rand()%7-3;
-        //     }
-        // }
-        // for (int i = 0; i < x; i++)
-        // {
-        //     for (int j = 0; j < y; j++)
-        //     {
-        //         map[i][j] = rand()%7-3;
-        //         while (map[i][j] == 0)
-        //             map[i][j] = rand()%7-3;
-        //     }
-        // }
     }
     
 }
