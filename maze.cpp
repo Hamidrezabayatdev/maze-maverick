@@ -57,20 +57,20 @@ int main(){
         cout << endl << "_____________________" << endl;
         while (k < moves.size())
         {
+            if (i == y-1 && j == x-1)
+                break;
             if (moves[k] == "Right")
             {
                 j++;
                 k++;
                 map[i][j] = pathNumbers[k];
             }
-            if (moves[k] == "Down")
+            else if (moves[k] == "Down")
             {
                 i++;
                 k++;
                 map[i][j] = pathNumbers[k];
             }
-            if (i == y-1 && j == x-1)
-                break;
         }
         map[y-1][x-1] = sum;
         for (int i = 0; i < y; i++)
