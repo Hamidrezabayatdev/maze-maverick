@@ -37,18 +37,6 @@ int main(){
             pathNumbers[i] = rand()%7-3;
         sum += pathNumbers[i];
     }
-    // sum -= pathNumbers[x+y-3];
-    // for (int i = 0; i < x+y-2; i++)
-    // {
-    //     // cout << path[i] << " ";
-    //     cout << pathNumbers[i] << " ";
-    // }
-    cout << endl;
-    for (int i = 0; i < path.size(); i++)
-    {
-        cout << pathNumbers[i] << " ";
-    }
-    cout << endl;
     while (pathTravel < x+y-2)
     {
         if (path[pathTravel] == 1)
