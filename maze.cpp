@@ -16,7 +16,7 @@ int main(){
     {
         for (int j = 0; j < y; j++)
         {
-            map[i][j] = 0;
+            map[i][j] = 70;
         }
     }
     vector<int> path;
@@ -26,6 +26,11 @@ int main(){
     // 2 = right
     for (int i = 1; i < y; i++)
         path.push_back(2);
+    for (int i = 0; i < x+y-2; i++)
+    {
+        cout << path[i] << "    ";
+    }
+    cout << endl;
     random_shuffle(path.begin(), path.end());
     int iGo = 0, jGo = 0, pathTravel = 0;
     int sum = 0;
@@ -50,6 +55,30 @@ int main(){
             map[iGo][jGo] = pathNumbers[pathTravel];
             pathTravel ++;
             jGo ++;
+        }
+    }
+    int otherNumberscount = x*y - (x+y-2);
+    vector<int> otherNumbers;
+    int zeroCount = rand()%4+2;
+    for (int i = 0; i < zeroCount; i++)
+        otherNumbers.push_back(0);
+    for (int i = zeroCount; i < otherNumberscount ; i++)
+    {
+        otherNumbers.push_back(rand()%7-3);
+        while (otherNumbers[i] == 0)
+            otherNumbers[i] = rand()%7-3;
+    }
+    random_shuffle(otherNumbers.begin(), otherNumbers.end());
+    int otherNumberscounter = 0;
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            if (map[i][j] == 70)
+            {
+                map[i][j] = otherNumbers[otherNumberscounter];
+                otherNumberscounter++;
+            }
         }
     }
     map[x-1][y-1] = sum;
