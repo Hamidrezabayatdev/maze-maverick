@@ -26,11 +26,6 @@ int main(){
     // 2 = right
     for (int i = 1; i < y; i++)
         path.push_back(2);
-    for (int i = 0; i < x+y-2; i++)
-    {
-        cout << path[i] << "    ";
-    }
-    cout << endl;
     random_shuffle(path.begin(), path.end());
     int iGo = 0, jGo = 0, pathTravel = 0;
     int sum = 0;
@@ -42,45 +37,70 @@ int main(){
             pathNumbers[i] = rand()%7-3;
         sum += pathNumbers[i];
     }
+    // for (int i = 0; i < x+y-2; i++)
+    // {
+    //     cout << path[i] << "    ";
+    // }
+    cout << endl;
+    int iHolder[x+y-2], jHolder[x+y-2];
     while (pathTravel < x+y-2)
     {
         if (path[pathTravel] == 1)
         {
             map[iGo][jGo] = pathNumbers[pathTravel];
+            iHolder[pathTravel] = iGo;
+            jHolder[pathTravel] = jGo;
             pathTravel ++;
             iGo ++;
         }
         else if (path[pathTravel] == 2)
         {
             map[iGo][jGo] = pathNumbers[pathTravel];
+            iHolder[pathTravel] = iGo;
+            jHolder[pathTravel] = jGo;
             pathTravel ++;
             jGo ++;
         }
     }
-    int otherNumberscount = x*y - (x+y-2);
-    vector<int> otherNumbers;
+    // cout << "iHolder: ";
+    // for (int i = 0; i < x+y-2; i++)
+    // {
+    //     cout << iHolder[i] << "    ";
+    // }
+    // cout << endl << "jHolder: ";
+    // for (int i = 0; i < x+y-2; i++)
+    // {
+    //     cout << jHolder[i] << "    ";
+    // }
+    // cout << endl;
+    int otherNumbersCount = x*y - (x+y-2);
     int zeroCount = rand()%4+2;
+    vector<int> otherNumbers;
     for (int i = 0; i < zeroCount; i++)
         otherNumbers.push_back(0);
-    for (int i = zeroCount; i < otherNumberscount ; i++)
-    {
+    for (int i = zeroCount; i < otherNumbersCount; i++){
         otherNumbers.push_back(rand()%7-3);
         while (otherNumbers[i] == 0)
             otherNumbers[i] = rand()%7-3;
     }
     random_shuffle(otherNumbers.begin(), otherNumbers.end());
-    int otherNumberscounter = 0;
+    // for (int i = 0; i < otherNumbersCount; i++)
+    // {
+    //     cout << otherNumbers[i] << "    ";
+    // }
+    int otherNumbersCounter = 0;
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
             if (map[i][j] == 70)
             {
-                map[i][j] = otherNumbers[otherNumberscounter];
-                otherNumberscounter++;
-            }
+                map[i][j] = otherNumbers[otherNumbersCounter];
+                otherNumbersCounter++;
+            } 
         }
     }
+    cout << endl;
     map[x-1][y-1] = sum;
     for (int i = 0; i < x; i++)
     {
@@ -90,4 +110,8 @@ int main(){
         }
         cout << endl;
     }
+    cout << "path:" << endl;
+    for (int i = 0; i < x+y-2; i++)
+        cout << "(" << iHolder[i]+1 << " , " << jHolder[i]+1 << ")" << " , ";
+    cout << "(" << x << " , " << y << ")";
 }
