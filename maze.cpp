@@ -106,7 +106,7 @@ int main(){
     {
         for (int j = 0; j < y; j++)
         {
-            cout << setw(2) << map[i][j] << "  ";
+            cout << setw(3) << map[i][j] << "  ";
         }
         cout << endl;
     }
