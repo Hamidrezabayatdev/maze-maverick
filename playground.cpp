@@ -56,6 +56,7 @@ int main()
     cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
     int profile;
     cin >> profile;
+    string globalUsername;
     int allGames, wins, finalWinTime, allTime;
     if (profile == 1)
     {
@@ -71,16 +72,18 @@ int main()
         cout << "\nplease enter your username: ";
         string username;
         cin >> username;
-        ifstream existingUser ("users/" +username+ ".txt");
-        existingUser >> allGames >> wins >> finalWinTime >> allTime;
+        globalUsername = username;
+        ifstream user ("users/" +username+ ".txt");
+        user >> allGames >> wins >> finalWinTime >> allTime;
     }
     else
     {
     cout << "please enter your username: ";
     string username;
     cin >> username;
-    ofstream newUser ("users/" +username+ ".txt");
+    globalUsername = username;
     }
+    ofstream user ("users/" +globalUsername+ ".txt");
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -211,6 +214,8 @@ int main()
                 wins ++;
                 finalWinTime = time1;
                 allTime += time1;
+                user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
+                user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "\nAll games time: " << allTime << endl;
                 cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
                 break;
             }
