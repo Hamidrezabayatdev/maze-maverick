@@ -7,7 +7,7 @@
 #include<ctime>
 using namespace std;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
-void winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
+bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 int main()
 {
     int row, column;
@@ -28,6 +28,7 @@ int main()
         }
         cout << endl;
     }
+    int timeBase = time(0), time1, sumTime;
     vector<int> xHolder;
     vector<int> yHolder;
     vector<char> moves;
@@ -39,6 +40,8 @@ int main()
     while (final == false)
     {
         cin >> move;
+        time1 = time(0) - timeBase;
+        sumTime += time1;
         if (move == 'B')
         {
             if (moves[moves.size()-1] == 'D')
@@ -131,10 +134,28 @@ int main()
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
+        else if (move == 'T')
+        {
+            cout << "time = " << time1 << "s" << endl;
+        }
         else if (move == 'E')
         {
-            winningState(row, column, xHolder, yHolder, map);
-            cout << "Game ended";
+            if (winningState(row, column, xHolder, yHolder, map) == true)
+            {
+                cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
+                break;
+            }
+            else
+            {
+                cout << "\033[31m" << "Mission faild!" << "\033[0m" << endl;
+                cout << "\t 1.Continue" << endl << "\t 2.give up!" << endl;
+                int cg;
+                cin >> cg;
+                if (cg == 1)
+                    continue;
+                else
+                    cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
+            }
         }
         
         // for testing x and y:
@@ -172,13 +193,13 @@ void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, in
         cout << endl;
     }
 }
-void winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
 {
     int sum = 0;
-    for (int i = 0; i < xHolder.size(); i++)
+    for (int i = 0; i < xHolder.size()-1; i++)
         sum += map[xHolder[i]][yHolder[i]];
     if (map[row-1][column-1] == sum)
-        cout << "\033[32m" << "You are succeed" << "\033[0m" << endl;
+        return true;
     else
-        cout << "\033[31m" << "Mission faild!" << "\033[0m" << endl;
+        return false;
 }
