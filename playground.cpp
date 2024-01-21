@@ -130,16 +130,17 @@ int main()
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        cout << endl  << "x: " << x << "\t" << "y: " << y << endl;
-        cout << "xHolder: ";
-        for (int k = 0; k < xHolder.size(); k++)
-            cout << xHolder[k] << "\t";
-        cout << endl << "yHolder: ";
-        for (int k = 0; k < yHolder.size(); k++)
-            cout << yHolder[k] << "\t";
-        cout << endl << endl;
-        if (x == row-1 && y == column-1)
-            break;
+        // for testing x and y:
+        // cout << endl  << "x: " << x << "\t" << "y: " << y << endl;
+        // cout << "xHolder: ";
+        // for (int k = 0; k < xHolder.size(); k++)
+        //     cout << xHolder[k] << "\t";
+        // cout << endl << "yHolder: ";
+        // for (int k = 0; k < yHolder.size(); k++)
+        //     cout << yHolder[k] << "\t";
+        // cout << endl << endl;
+        // if (x == row-1 && y == column-1)
+        //     break;
     }
     
 }
