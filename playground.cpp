@@ -139,8 +139,8 @@ int main()
         // for (int k = 0; k < yHolder.size(); k++)
         //     cout << yHolder[k] << "\t";
         // cout << endl << endl;
-        // if (x == row-1 && y == column-1)
-        //     break;
+        if (x == row-1 && y == column-1)
+            break;
     }
     
 }
