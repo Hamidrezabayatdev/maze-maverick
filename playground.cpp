@@ -57,7 +57,7 @@ int main()
     int profile;
     cin >> profile;
     string globalUsername;
-    int allGames, wins, finalWinTime, allTime;
+    int allGames = 0, wins = 0, finalWinTime = 0, allTime = 0;
     if (profile == 1)
     {
         DIR *dr;
@@ -82,6 +82,8 @@ int main()
     string username;
     cin >> username;
     globalUsername = username;
+    ofstream firstUser ("users/" +username+ ".txt");
+    firstUser << "0" << " " << "0" << " " << "0" << " " << "0" << endl;
     }
     ofstream user ("users/" +globalUsername+ ".txt");
     for (int i = 0; i < row; i++)
@@ -148,8 +150,22 @@ int main()
         
         else if (move == 'D')
         {
-            if (y == column-1 || (map[x][y+1] == 0) || moves[moves.size()-1] == 'A')
+            if (y == column-1 || moves[moves.size()-1] == 'A')
                 continue;
+            else if ((map[x][y+1] == 0))
+            {
+                if (x == row-1 && y == column-2)
+                {
+                    moves.push_back('D');
+                    finalMove = 'D';
+                    y ++;
+                    xHolder.push_back(x);
+                    yHolder.push_back(y);
+                    printMap(row, column, xHolder, yHolder, map);
+                }
+                else
+                    continue;
+            }
             else
             {
                 moves.push_back('D');
@@ -176,8 +192,22 @@ int main()
         }
         else if (move == 'S')
         {
-            if (x == row-1 || (map[x+1][y] == 0) || moves[moves.size()-1] == 'W')
+            if (x == row-1 || moves[moves.size()-1] == 'W')
                 continue;
+            else if ((map[x+1][y] == 0))
+            {
+                if (x == row-2 && y == column-1)
+                {
+                    moves.push_back('S');
+                    finalMove = 'S';
+                    x ++;
+                    xHolder.push_back(x);
+                    yHolder.push_back(y);
+                    printMap(row, column, xHolder, yHolder, map);
+                }
+                else
+                    continue;
+            }
             else
             {
                 moves.push_back('S');
@@ -215,7 +245,7 @@ int main()
                 finalWinTime = time1;
                 allTime += time1;
                 user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
-                user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "\nAll games time: " << allTime << endl;
+                user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
                 cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
                 break;
             }
@@ -231,6 +261,8 @@ int main()
                 {
                     allGames ++;
                     allTime += time1;
+                    user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
+                    user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
                     cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
                     break;
                 }

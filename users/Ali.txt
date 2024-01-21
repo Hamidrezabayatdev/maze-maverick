@@ -1,6 +1,6 @@
-2 2 7 42
+3 2 7 49
 
-All games: 2
+All games: 3
 Wins: 2
-Final win time: 7
-All games time: 42
+Final win time: 7s
+All games time: 49s

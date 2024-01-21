@@ -11,6 +11,10 @@ int main(){
     int x, y;
     cout << "Enter row & column:" << endl;
     cin >> x >> y;
+    // string mapName;
+    // cout << "Enter your map name: ";
+    // cin >> mapName;
+    // ofstream output ("maps/" +mapName+ ".txt");
     int map[x][y];
     for (int i = 0; i < x; i++)
     {
@@ -81,18 +85,20 @@ int main(){
             } 
         }
     }
-    cout << endl << "Enter your map file name: ";
-    string fileName;
-    cin >> fileName;
-    ofstream output ("maps/" +fileName+ ".txt");
+    cout << "Enter your map file name: ";
+    string mapName;
+    cin >> mapName;
+    ofstream output ("maps/" +mapName+ ".txt");
     map[x-1][y-1] = sum;
-    
+    cout << "\033[32m" << "Your map has been successfully created and saved like this: \n" << "\033[0m";
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
             cout << setw(3) << map[i][j] << "  ";
+            output << setw(3) << map[i][j] << "  ";
         }
+        output << endl;
         cout << endl;
     }
 }
