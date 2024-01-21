@@ -91,7 +91,7 @@ int main()
         }
         else if (move == 'A')
         {
-            if (y == 0 || (map[x][y-1] == 0) || moves[moves.size()-1] == 'D')
+            if (y == 0 || (map[x][y-1] == 0))
                 continue;
             else
             {
@@ -105,7 +105,7 @@ int main()
         }
         else if (move == 'S')
         {
-            if (x == row-1 || (map[x+1][y] == 0) || moves[moves.size()-1] == 'W')
+            if (x == row-1 || (map[x+1][y] == 0))
                 continue;
             else
             {
@@ -119,7 +119,7 @@ int main()
         }
         else if (move == 'W')
         {
-            if (x == 0 || (map[x-1][y] == 0) || moves[moves.size()-1] == 'S')
+            if (x == 0 || (map[x-1][y] == 0))
                 continue;
             else
             {
