@@ -15,7 +15,6 @@ int main()
     int** map = new int*[row];
     for (int i = 0; i < row; i++)
         map[i] = new int[column];
-    
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -32,6 +31,7 @@ int main()
     vector<int> xHolder;
     vector<int> yHolder;
     vector<char> moves;
+    moves.push_back('G');
     char move, finalMove;
     int x = 0, y = 0;
     xHolder.push_back(x);
@@ -80,7 +80,7 @@ int main()
         
         else if (move == 'D')
         {
-            if (y == column-1 || (map[x][y+1] == 0))
+            if (y == column-1 || (map[x][y+1] == 0) || moves[moves.size()-1] == 'A')
                 continue;
             else
             {
@@ -94,7 +94,7 @@ int main()
         }
         else if (move == 'A')
         {
-            if (y == 0 || (map[x][y-1] == 0))
+            if (y == 0 || (map[x][y-1] == 0) || moves[moves.size()-1] == 'D')
                 continue;
             else
             {
@@ -108,7 +108,7 @@ int main()
         }
         else if (move == 'S')
         {
-            if (x == row-1 || (map[x+1][y] == 0))
+            if (x == row-1 || (map[x+1][y] == 0) || moves[moves.size()-1] == 'W')
                 continue;
             else
             {
@@ -122,7 +122,7 @@ int main()
         }
         else if (move == 'W')
         {
-            if (x == 0 || (map[x-1][y] == 0))
+            if (x == 0 || (map[x-1][y] == 0) || moves[moves.size()-1] == 'S')
                 continue;
             else
             {
