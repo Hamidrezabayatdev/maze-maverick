@@ -6,12 +6,15 @@
 #include <random>
 #include<ctime>
 using namespace std;
-// void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int map[row][column]);
+void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 int main()
 {
     int row, column;
     cin >> row >> column;
-    int map[row][column];
+    int** map = new int*[row];
+    for (int i = 0; i < row; i++)
+        map[i] = new int[column];
+    
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -26,6 +29,7 @@ int main()
     }
     vector<int> xHolder;
     vector<int> yHolder;
+    vector<char> moves;
     char move, finalMove;
     int x = 0, y = 0;
     xHolder.push_back(x);
@@ -36,246 +40,94 @@ int main()
         cin >> move;
         if (move == 'B')
         {
-            if (finalMove == 'D')
+            if (moves[moves.size()-1] == 'D')
             {
                 y --;
                 xHolder.pop_back();
                 yHolder.pop_back();
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                moves.pop_back();
+                printMap(row, column, xHolder, yHolder, map);
             }
-            else if (finalMove == 'A')
+            else if (moves[moves.size()-1] == 'A')
             {
                 y ++;
                 xHolder.pop_back();
                 yHolder.pop_back();
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                moves.pop_back();
+                printMap(row, column, xHolder, yHolder, map);
             }
-            else if (finalMove == 'S')
+            else if (moves[moves.size()-1] == 'S')
             {
                 x --;
                 xHolder.pop_back();
                 yHolder.pop_back();
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                moves.pop_back();
+                printMap(row, column, xHolder, yHolder, map);
             }
-            else if (finalMove == 'W')
+            else if (moves[moves.size()-1] == 'W')
             {
                 x ++;
                 xHolder.pop_back();
                 yHolder.pop_back();
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                moves.pop_back();
+                printMap(row, column, xHolder, yHolder, map);
             }
         }
         
         else if (move == 'D')
         {
-            if (y == column-1 || (map[x][y+1] == 0) || finalMove == 'A')
+            if (y == column-1 || (map[x][y+1] == 0))
                 continue;
             else
             {
+                moves.push_back('D');
                 finalMove = 'D';
                 y ++;
                 xHolder.push_back(x);
                 yHolder.push_back(y);
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                printMap(row, column, xHolder, yHolder, map);
             }
         }
         else if (move == 'A')
         {
-            if (y == 0 || (map[x][y-1] == 0) || finalMove == 'D')
+            if (y == 0 || (map[x][y-1] == 0) || moves[moves.size()-1] == 'D')
                 continue;
             else
             {
+                moves.push_back('A');
                 finalMove = 'A';
                 y --;
                 xHolder.push_back(x);
                 yHolder.push_back(y);
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                printMap(row, column, xHolder, yHolder, map);
             }
         }
         else if (move == 'S')
         {
-            if (x == row-1 || (map[x+1][y] == 0) || finalMove == 'W')
+            if (x == row-1 || (map[x+1][y] == 0) || moves[moves.size()-1] == 'W')
                 continue;
             else
             {
+                moves.push_back('S');
                 finalMove = 'S';
                 x ++;
                 xHolder.push_back(x);
                 yHolder.push_back(y);
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                printMap(row, column, xHolder, yHolder, map);
             }
         }
         else if (move == 'W')
         {
-            if (x == 0 || (map[x-1][y] == 0) || finalMove == 'S')
+            if (x == 0 || (map[x-1][y] == 0) || moves[moves.size()-1] == 'S')
                 continue;
             else
             {
+                moves.push_back('W');
                 finalMove = 'W';
                 x --;
                 xHolder.push_back(x);
                 yHolder.push_back(y);
-                for (int i = 0; i < row; i++)
-                {
-                    for (int j = 0; j < column; j++)
-                    {
-                        int temp = 0;
-                        for (int k = 0; k < xHolder.size(); k++)
-                        {
-                            if (i == xHolder[k] && j == yHolder[k])
-                                temp++;
-                        }
-                            if (temp > 0)
-                            {
-                                cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                            }
-                            else
-                            {
-                                cout << setw(3) <<  map[i][j] << "  ";
-                            }
-                    }
-                    cout << endl;
-                }
+                printMap(row, column, xHolder, yHolder, map);
             }
         }
         cout << endl  << "x: " << x << "\t" << "y: " << y << endl;
@@ -291,27 +143,27 @@ int main()
     }
     
 }
-// void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int map[row][column])
-// {
-//     for (int i = 0; i < row; i++)
-//     {
-//         for (int j = 0; j < column; j++)
-//         {
-//             int temp = 0;
-//             for (int k = 0; k < xHolder.size(); k++)
-//             {
-//                 if (i == xHolder[k] && j == yHolder[k])
-//                     temp++;
-//             }
-//                 if (temp > 0)
-//                 {
-//                     cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-//                 }
-//                 else
-//                 {
-//                     cout << setw(3) <<  map[i][j] << "  ";
-//                 }
-//         }
-//         cout << endl;
-//     }
-// }
+void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            int temp = 0;
+            for (int k = 0; k < xHolder.size(); k++)
+            {
+                if (i == xHolder[k] && j == yHolder[k])
+                    temp++;
+            }
+                if (temp > 0)
+                {
+                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                }
+                else
+                {
+                    cout << setw(3) <<  map[i][j] << "  ";
+                }
+        }
+        cout << endl;
+    }
+}
