@@ -7,6 +7,7 @@
 #include<ctime>
 using namespace std;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
+void winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 int main()
 {
     int row, column;
@@ -142,7 +143,7 @@ int main()
         if (x == row-1 && y == column-1)
             break;
     }
-    
+    winningState(row, column, xHolder, yHolder, map);
 }
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
 {
@@ -167,4 +168,14 @@ void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, in
         }
         cout << endl;
     }
+}
+void winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    int sum = 0;
+    for (int i = 0; i < xHolder.size(); i++)
+        sum += map[xHolder[i]][yHolder[i]];
+    if (map[row-1][column-1] == sum)
+        cout << "\033[32m" << "You are succeed" << "\033[0m" << endl;
+    else
+        cout << "\033[31m" << "Mission faild!" << "\033[0m" << endl;
 }
