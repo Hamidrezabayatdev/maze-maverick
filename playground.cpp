@@ -131,6 +131,12 @@ int main()
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
+        else if (move == 'E')
+        {
+            winningState(row, column, xHolder, yHolder, map);
+            cout << "Game ended";
+        }
+        
         // for testing x and y:
         // cout << endl  << "x: " << x << "\t" << "y: " << y << endl;
         // cout << "xHolder: ";
@@ -140,10 +146,7 @@ int main()
         // for (int k = 0; k < yHolder.size(); k++)
         //     cout << yHolder[k] << "\t";
         // cout << endl << endl;
-        if (x == row-1 && y == column-1)
-            break;
     }
-    winningState(row, column, xHolder, yHolder, map);
 }
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
 {
