@@ -56,14 +56,31 @@ int main()
     cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
     int profile;
     cin >> profile;
+    int allGames, wins, finalWinTime, allTime;
     if (profile == 1)
     {
-        cout << "please enter your username: ";
+        DIR *dr;
+        struct dirent *en;
+        dr = opendir("users/"); //open all directory
+        if (dr) {
+           while ((en = readdir(dr)) != NULL) {
+              cout<<" \n"<<en->d_name; //print all directory name
+           }
+           closedir(dr); //close all directory
+        }
+        cout << "\nplease enter your username: ";
+        string username;
+        cin >> username;
+        ifstream existingUser ("users/" +username+ ".txt");
+        existingUser >> allGames >> wins >> finalWinTime >> allTime;
     }
-    
+    else
+    {
     cout << "please enter your username: ";
     string username;
     cin >> username;
+    ofstream newUser ("users/" +username+ ".txt");
+    }
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -190,6 +207,10 @@ int main()
         {
             if (winningState(row, column, xHolder, yHolder, map) == true)
             {
+                allGames ++;
+                wins ++;
+                finalWinTime = time1;
+                allTime += time1;
                 cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
                 break;
             }
@@ -202,7 +223,12 @@ int main()
                 if (cg == 1)
                     continue;
                 else
+                {
+                    allGames ++;
+                    allTime += time1;
                     cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
+                    break;
+                }
             }
         }
     }
