@@ -5,21 +5,69 @@
 #include <algorithm>
 #include <random>
 #include<ctime>
+#include <dirent.h>
+#include <sys/types.h>
 using namespace std;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 int main()
 {
-    int row, column;
-    cin >> row >> column;
+    int row, column, customOrImport;
+    cout << "Enter row & column:" << endl;
+            cin >> row >> column;
+    cout << "Playground" << endl << "\t 1.Choose from existing maps" << endl << "\t 2.Import my custom map" << endl;
+    cin >> customOrImport;
     int** map = new int*[row];
     for (int i = 0; i < row; i++)
         map[i] = new int[column];
+    if (customOrImport == 2)
+    {
+        string address;
+        cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): ";
+        cin >> address;
+        ifstream inputAddress (address);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+                inputAddress >> map[i][j];
+        }
+    }
+    else
+    {
+        DIR *dr;
+        struct dirent *en;
+        dr = opendir("maps/"); //open all directory
+        if (dr) {
+           while ((en = readdir(dr)) != NULL) {
+              cout<<" \n"<<en->d_name; //print all directory name
+           }
+           closedir(dr); //close all directory
+        }
+        cout << endl << "Enter your map Name (exp. Map1): ";
+        string name;
+        cin >> name;
+        ifstream inputName ("maps/" +name+ ".txt");
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+                inputName >> map[i][j];
+        }
+    }
+    cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
+    int profile;
+    cin >> profile;
+    if (profile == 1)
+    {
+        cout << "please enter your username: ";
+    }
+    
+    cout << "please enter your username: ";
+    string username;
+    cin >> username;
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
         {
-            cin >> map[i][j];
             if (i == 0 && j == 0)
                 cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
             else
@@ -157,16 +205,6 @@ int main()
                     cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
             }
         }
-        
-        // for testing x and y:
-        // cout << endl  << "x: " << x << "\t" << "y: " << y << endl;
-        // cout << "xHolder: ";
-        // for (int k = 0; k < xHolder.size(); k++)
-        //     cout << xHolder[k] << "\t";
-        // cout << endl << "yHolder: ";
-        // for (int k = 0; k < yHolder.size(); k++)
-        //     cout << yHolder[k] << "\t";
-        // cout << endl << endl;
     }
 }
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)

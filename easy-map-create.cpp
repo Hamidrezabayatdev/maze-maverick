@@ -81,8 +81,12 @@ int main(){
             } 
         }
     }
-    cout << endl;
+    cout << endl << "Enter your map file name: ";
+    string fileName;
+    cin >> fileName;
+    ofstream output ("maps/" +fileName+ ".txt");
     map[x-1][y-1] = sum;
+    
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
