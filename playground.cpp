@@ -12,11 +12,70 @@ void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, in
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y);
 void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves);
-// void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
+void playground (int t);
+void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
 int main()
 {
-    time_t now = time(0); // get current dat/time with respect to system  
-    char* dt = ctime(&now); // convert it into string
+    playground(2);
+}
+void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            int temp = 0;
+            for (int k = 0; k < xHolder.size(); k++)
+            {
+                if (i == xHolder[k] && j == yHolder[k])
+                    temp++;
+            }
+                if (temp > 0)
+                {
+                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                }
+                else
+                {
+                    cout << setw(3) <<  map[i][j] << "  ";
+                }
+        }
+        cout << endl;
+    }
+}
+bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    int sum = 0;
+    for (int i = 0; i < xHolder.size()-1; i++)
+        sum += map[xHolder[i]][yHolder[i]];
+    if (map[row-1][column-1] == sum)
+        return true;
+    else
+        return false;
+}
+void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y)
+{
+    moves.push_back(move);
+    xHolder.push_back(x);
+    yHolder.push_back(y);
+}
+void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
+{
+    xHolder.pop_back();
+    yHolder.pop_back();
+    moves.pop_back();
+}
+void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
+{
+    ofstream history ("states/history.txt", ios::app);
+    history << "date & time: " << dt << "\n Username: " << globalUsername << "\n Map: " << globalMapname << "\n Time spent: " << time1;
+    if (winOrLose == true)
+        history << "\n Result: Win!\n";
+    else
+        history << "\n Result: Lose!\n";
+    history << "-----------------------------------------\n\n";
+}
+void playground (int t)
+{
     int row, column, customOrImport;
     cout << "Enter row & column:" << endl;
             cin >> row >> column;
@@ -99,6 +158,8 @@ int main()
     ofstream user ("users/" +globalUsername+ ".txt");
     int timeBase = time(0), time1, sumTime;
     cout << "Time started\n";
+    time_t now = time(0); // get current dat/time with respect to system  
+    char* dt = ctime(&now); // convert it into string
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -237,6 +298,7 @@ int main()
                 wins ++;
                 finalWinTime = time1;
                 allTime += time1;
+                addHistory (dt, globalUsername, globalMapname, time1, winOrLose);
                 user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
                 user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
                 cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
@@ -255,6 +317,7 @@ int main()
                     winOrLose = false;
                     allGames ++;
                     allTime += time1;
+                    addHistory (dt, globalUsername, globalMapname, time1, winOrLose);
                     user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
                     user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
                     cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
@@ -264,52 +327,3 @@ int main()
         }
     }
 }
-void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
-{
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < column; j++)
-        {
-            int temp = 0;
-            for (int k = 0; k < xHolder.size(); k++)
-            {
-                if (i == xHolder[k] && j == yHolder[k])
-                    temp++;
-            }
-                if (temp > 0)
-                {
-                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
-                }
-                else
-                {
-                    cout << setw(3) <<  map[i][j] << "  ";
-                }
-        }
-        cout << endl;
-    }
-}
-bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
-{
-    int sum = 0;
-    for (int i = 0; i < xHolder.size()-1; i++)
-        sum += map[xHolder[i]][yHolder[i]];
-    if (map[row-1][column-1] == sum)
-        return true;
-    else
-        return false;
-}
-void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y)
-{
-    moves.push_back(move);
-    xHolder.push_back(x);
-    yHolder.push_back(y);
-}
-void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
-{
-    xHolder.pop_back();
-    yHolder.pop_back();
-    moves.pop_back();
-}
-// void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
-// {
-// }

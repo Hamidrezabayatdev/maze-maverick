@@ -1,0 +1,11 @@
+date & time: Mon Jan 22 22:06:12 2024
+
+ Username: Ali
+ Map: test1
+ Time spent: 6
+ Result: Lose!date & time: Mon Jan 22 22:07:11 2024
+
+ Username: Ali
+ Map: test2
+ Time spent: 7
+ Result: Lose!
