@@ -13,8 +13,17 @@ void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, in
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y);
 void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves);
-void playground (int t);
+bool customSort (int a, int b);
 void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
+void leaderboard (string username);
+void playground (int t);
+struct player
+{
+    string username;
+    int wins;
+    int time;
+};
+
 int main()
 {
     playground(2);
@@ -66,6 +75,14 @@ void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
     yHolder.pop_back();
     moves.pop_back();
 }
+bool customsort (player& a, player& b)
+{
+    if (a.wins != b.wins)
+        return a.wins > b.wins;
+    else
+        return a.time < b.time;
+    
+}
 void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
 {
     ofstream history ("states/history.txt", ios::app);
@@ -75,6 +92,19 @@ void addHistory (char* dt, string globalUsername, string globalMapname, int time
     else
         history << "\n Result: Lose!\n";
     history << "-----------------------------------------\n\n";
+}
+void leaderboard (vector<player>& players)
+{
+    ofstream leader ("states/leaderboard.txt");
+    sort (players.begin(), players.end(), customsort);
+    if (players.size() >= 3)
+    {
+        for (int i = 0; i < 3; i++)
+            leader << i+1 << ". " << players[i].username << " with " << players[i].wins << " wins in " << players[i].time << "s\n";
+    }
+    else
+        for (int i = 0; i < players.size(); i++)
+            leader << i+1 << ". " << players[i].username << " with " << players[i].wins << " wins in " << players[i].time << "s\n";
 }
 void playground (int t)
 {
@@ -156,8 +186,12 @@ void playground (int t)
     globalUsername = username;
     ofstream firstUser ("users/" +username+ ".txt");
     firstUser << "0" << " " << "0" << " " << "0" << " " << "0" << endl;
+    ofstream userForAllUsersFile ("users/users.txt", ios::app);
+    userForAllUsersFile << username << " ";
     }
     ofstream user ("users/" +globalUsername+ ".txt");
+    vector<player> players;
+    player st;
     int timeBase = time(0), time1, sumTime;
     cout << "Time started\n";
     time_t now = time(0); // get current dat/time with respect to system  
@@ -328,4 +362,17 @@ void playground (int t)
             }
         }
     }
+    ifstream inputForLeaderboard ("users/users.txt");
+    string usernameForLeaderboard;
+    while (inputForLeaderboard >> usernameForLeaderboard)
+    {
+        ifstream forStruct ("users/" + usernameForLeaderboard + ".txt");
+        int allGamesForLeaderboard, winsForLeaderboard, winTimeForLeaderboard, timeForLeaderboard;
+        forStruct >> allGamesForLeaderboard >> winsForLeaderboard >> winTimeForLeaderboard >> timeForLeaderboard;
+        st.username = usernameForLeaderboard;
+        st.time = timeForLeaderboard;
+        st.wins = winsForLeaderboard;
+        players.push_back(st);
+    }
+    leaderboard (players);
 }
