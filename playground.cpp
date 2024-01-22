@@ -86,6 +86,8 @@ int main()
     firstUser << "0" << " " << "0" << " " << "0" << " " << "0" << endl;
     }
     ofstream user ("users/" +globalUsername+ ".txt");
+    int timeBase = time(0), time1, sumTime;
+    cout << "Time started\n";
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
@@ -97,7 +99,6 @@ int main()
         }
         cout << endl;
     }
-    int timeBase = time(0), time1, sumTime;
     vector<int> xHolder;
     vector<int> yHolder;
     vector<char> moves;
@@ -114,7 +115,12 @@ int main()
         sumTime += time1;
         if (move == 'B')
         {
-            if (moves[moves.size()-1] == 'D')
+            if (moves[moves.size()-1] == 'G')
+            {
+                cout << "You can't go back at the first place\n";
+                continue;
+            }
+            else if (moves[moves.size()-1] == 'D')
             {
                 y --;
                 xHolder.pop_back();
