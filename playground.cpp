@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 using namespace std;
+// Playground:
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y);
@@ -18,6 +19,7 @@ int main()
 {
     playground(2);
 }
+// Playground:
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
 {
     for (int i = 0; i < row; i++)
@@ -67,7 +69,7 @@ void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
 void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
 {
     ofstream history ("states/history.txt", ios::app);
-    history << "date & time: " << dt << "\n Username: " << globalUsername << "\n Map: " << globalMapname << "\n Time spent: " << time1;
+    history << "date & time: " << dt << "\n Username: " << globalUsername << "\n Map: " << globalMapname << "\n Time spent: " << time1 << "s";
     if (winOrLose == true)
         history << "\n Result: Win!\n";
     else

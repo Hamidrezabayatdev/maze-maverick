@@ -8,4 +8,11 @@ date & time: Mon Jan 22 22:06:12 2024
  Username: Ali
  Map: test2
  Time spent: 7
+ Result: Lose!date & time: Mon Jan 22 22:13:19 2024
+
+ Username: alireza
+ Map: test4
+ Time spent: 26
  Result: Lose!
+-----------------------------------------
+
