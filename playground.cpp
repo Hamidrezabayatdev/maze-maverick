@@ -10,10 +10,13 @@
 using namespace std;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
-void pushbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves, char move, int x, int y);
-void popbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves);
+void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y);
+void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves);
+// void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
 int main()
 {
+    time_t now = time(0); // get current dat/time with respect to system  
+    char* dt = ctime(&now); // convert it into string
     int row, column, customOrImport;
     cout << "Enter row & column:" << endl;
             cin >> row >> column;
@@ -22,12 +25,17 @@ int main()
     int** map = new int*[row];
     for (int i = 0; i < row; i++)
         map[i] = new int[column];
+    string globalMapname;
     if (customOrImport == 2)
     {
         string address;
-        cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): ";
+        cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): \n";
         cin >> address;
         ifstream inputAddress (address);
+        cout << endl << "Enter your map Name (exp. Map1): ";
+        string name;
+        cin >> name;
+        globalMapname = name;
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < column; j++)
@@ -48,6 +56,7 @@ int main()
         cout << endl << "Enter your map Name (exp. Map1): ";
         string name;
         cin >> name;
+        globalMapname = name;
         ifstream inputName ("maps/" +name+ ".txt");
         for (int i = 0; i < row; i++)
         {
@@ -110,6 +119,7 @@ int main()
     xHolder.push_back(x);
     yHolder.push_back(y);
     bool final = false;
+    bool winOrLose;
     while (final == false)
     {
         cin >> move;
@@ -156,9 +166,8 @@ int main()
             {
                 if (x == row-1 && y == column-2)
                 {
-                    pushbacks (xHolder, yHolder, moves, move, x, y);
-
                     y ++;
+                    pushbacks (xHolder, yHolder, moves, move, x, y);
                     printMap(row, column, xHolder, yHolder, map);
                 }
                 else
@@ -166,8 +175,8 @@ int main()
             }
             else
             {
-                pushbacks (xHolder, yHolder, moves, move, x, y);
                 y ++;
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -177,8 +186,8 @@ int main()
                 continue;
             else
             {
-                pushbacks (xHolder, yHolder, moves, move, x, y);
                 y --;
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -190,8 +199,8 @@ int main()
             {
                 if (x == row-2 && y == column-1)
                 {
-                    pushbacks (xHolder, yHolder, moves, move, x, y);
                     x ++;
+                    pushbacks (xHolder, yHolder, moves, move, x, y);
                     printMap(row, column, xHolder, yHolder, map);
                 }
                 else
@@ -199,8 +208,8 @@ int main()
             }
             else
             {
-                pushbacks (xHolder, yHolder, moves, move, x, y);
                 x ++;
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -210,8 +219,8 @@ int main()
                 continue;
             else
             {
-                pushbacks (xHolder, yHolder, moves, move, x, y);
                 x --;
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -223,6 +232,7 @@ int main()
         {
             if (winningState(row, column, xHolder, yHolder, map) == true)
             {
+                winOrLose = true;
                 allGames ++;
                 wins ++;
                 finalWinTime = time1;
@@ -242,6 +252,7 @@ int main()
                     continue;
                 else
                 {
+                    winOrLose = false;
                     allGames ++;
                     allTime += time1;
                     user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
@@ -287,15 +298,18 @@ bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder
     else
         return false;
 }
-void pushbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves, char move, int x, int y)
+void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y)
 {
     moves.push_back(move);
     xHolder.push_back(x);
     yHolder.push_back(y);
 }
-void popbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves)
+void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
 {
     xHolder.pop_back();
     yHolder.pop_back();
     moves.pop_back();
 }
+// void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
+// {
+// }
