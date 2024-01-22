@@ -10,6 +10,8 @@
 using namespace std;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
+void pushbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves, char move, int x, int y);
+void popbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves);
 int main()
 {
     int row, column, customOrImport;
@@ -103,7 +105,7 @@ int main()
     vector<int> yHolder;
     vector<char> moves;
     moves.push_back('G');
-    char move, finalMove;
+    char move;
     int x = 0, y = 0;
     xHolder.push_back(x);
     yHolder.push_back(y);
@@ -123,33 +125,25 @@ int main()
             else if (moves[moves.size()-1] == 'D')
             {
                 y --;
-                xHolder.pop_back();
-                yHolder.pop_back();
-                moves.pop_back();
+                popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
             else if (moves[moves.size()-1] == 'A')
             {
                 y ++;
-                xHolder.pop_back();
-                yHolder.pop_back();
-                moves.pop_back();
+                popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
             else if (moves[moves.size()-1] == 'S')
             {
                 x --;
-                xHolder.pop_back();
-                yHolder.pop_back();
-                moves.pop_back();
+                popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
             else if (moves[moves.size()-1] == 'W')
             {
                 x ++;
-                xHolder.pop_back();
-                yHolder.pop_back();
-                moves.pop_back();
+                popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -162,11 +156,9 @@ int main()
             {
                 if (x == row-1 && y == column-2)
                 {
-                    moves.push_back('D');
-                    finalMove = 'D';
+                    pushbacks (xHolder, yHolder, moves, move, x, y);
+
                     y ++;
-                    xHolder.push_back(x);
-                    yHolder.push_back(y);
                     printMap(row, column, xHolder, yHolder, map);
                 }
                 else
@@ -174,11 +166,8 @@ int main()
             }
             else
             {
-                moves.push_back('D');
-                finalMove = 'D';
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 y ++;
-                xHolder.push_back(x);
-                yHolder.push_back(y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -188,11 +177,8 @@ int main()
                 continue;
             else
             {
-                moves.push_back('A');
-                finalMove = 'A';
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 y --;
-                xHolder.push_back(x);
-                yHolder.push_back(y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -204,11 +190,8 @@ int main()
             {
                 if (x == row-2 && y == column-1)
                 {
-                    moves.push_back('S');
-                    finalMove = 'S';
+                    pushbacks (xHolder, yHolder, moves, move, x, y);
                     x ++;
-                    xHolder.push_back(x);
-                    yHolder.push_back(y);
                     printMap(row, column, xHolder, yHolder, map);
                 }
                 else
@@ -216,11 +199,8 @@ int main()
             }
             else
             {
-                moves.push_back('S');
-                finalMove = 'S';
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 x ++;
-                xHolder.push_back(x);
-                yHolder.push_back(y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -230,11 +210,8 @@ int main()
                 continue;
             else
             {
-                moves.push_back('W');
-                finalMove = 'W';
+                pushbacks (xHolder, yHolder, moves, move, x, y);
                 x --;
-                xHolder.push_back(x);
-                yHolder.push_back(y);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
@@ -309,4 +286,16 @@ bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder
         return true;
     else
         return false;
+}
+void pushbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves, char move, int x, int y)
+{
+    moves.push_back(move);
+    xHolder.push_back(x);
+    yHolder.push_back(y);
+}
+void popbacks (vector<int> xHolder, vector<int> yHolder, vector<char> moves)
+{
+    xHolder.pop_back();
+    yHolder.pop_back();
+    moves.pop_back();
 }

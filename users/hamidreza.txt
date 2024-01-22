@@ -1,6 +1,0 @@
-6 3 41 129
-
-All games: 6
-Wins: 3
-Final win time: 41s
-All games time: 129s
