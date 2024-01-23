@@ -17,6 +17,7 @@ bool customSort (int a, int b);
 void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
 void showHistory (int mode);
 void leaderboard (string username);
+void showLeaderboard (int t);
 void playground (int t);
 struct player
 {
@@ -24,11 +25,10 @@ struct player
     int wins;
     int time;
 };
-
 int main()
 {
     cout << "\033[36m" << "Game started" << "\033[0m\n";
-    cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit";
+    cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit\n";
     int mode;
     cin >> mode;
     if (mode == 2)
@@ -40,7 +40,6 @@ int main()
     if (mode == 6)
         exit(0);
 }
-// Playground:
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
 {
     for (int i = 0; i < row; i++)
@@ -127,6 +126,7 @@ void leaderboard (vector<player>& players)
 }
 void showLeaderboard (int t)
 {
+    cout << "\033[36m" << "Leaderboard:" << "\033[0m\n";
     ifstream showLeaderboard ("states/leaderboard.txt");
     string lineLeaderboard;
     while (getline(showLeaderboard, lineLeaderboard))
