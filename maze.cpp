@@ -454,8 +454,10 @@ void easyMapCreate (int t)
 {
     srand(time(0));
     int x, y;
-    cout << "Enter row & column:" << endl;
-    cin >> x >> y;
+    cout << "Enter row: ";
+    cin >> x;
+    cout << "Enter column: ";
+    cin >> y;
     // string mapName;
     // cout << "Enter your map name: ";
     // cin >> mapName;
