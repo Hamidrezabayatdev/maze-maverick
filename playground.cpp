@@ -161,6 +161,19 @@ void playground (int t)
             for (int j = 0; j < column; j++)
                 inputAddress >> map[i][j];
         }
+        cout << "\033[36m" << "Do you want to save your map in this game?\n\t1.Yes\n\t2.No" << "\033[0m\n";
+        int mapSave;
+        cin >> mapSave;
+        if (mapSave == 1)
+        {
+            ofstream importedSave ("maps/" +name+ ".txt");
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                    importedSave << map[i][j];
+            }
+        }
+        
     }
     else if (customOrImport == 1)
     {
@@ -205,7 +218,7 @@ void playground (int t)
            }
            closedir(dr); //close all directory
         }
-        cout << "\nplease enter your username: ";
+        cout << "\nplease enter your username (\033[31mdo not enter 'users'\033[0m): ";
         string username;
         cin >> username;
         globalUsername = username;
@@ -214,7 +227,7 @@ void playground (int t)
     }
     else
     {
-    cout << "please enter your username: ";
+    cout << "please enter your username (\033[31mdo not enter 'users'\033[0m): ";
     string username;
     cin >> username;
     globalUsername = username;

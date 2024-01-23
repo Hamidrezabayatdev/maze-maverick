@@ -168,3 +168,27 @@ date & time: Tue Jan 23 21:37:19 2024
  Result: Win![0m
 -----------------------------------------
 
+date & time: Tue Jan 23 22:35:26 2024
+
+ Username: alereza
+ Map: alereza
+ Time spent: 38s[31m
+ Result: Lose![0m
+-----------------------------------------
+
+date & time: Tue Jan 23 22:40:01 2024
+
+ Username: alereza
+ Map: ommi
+ Time spent: 131s[32m
+ Result: Win![0m
+-----------------------------------------
+
+date & time: Tue Jan 23 22:42:48 2024
+
+ Username: alereza
+ Map: test2
+ Time spent: 33s[32m
+ Result: Win![0m
+-----------------------------------------
+
