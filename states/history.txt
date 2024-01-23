@@ -88,3 +88,83 @@ date & time: Mon Jan 22 23:35:22 2024
  Result: Win!
 -----------------------------------------
 
+date & time: Mon Jan 22 23:38:17 2024
+
+ Username: reza1
+ Map: test3
+ Time spent: 27s
+ Result: Lose!
+-----------------------------------------
+
+date & time: Tue Jan 23 14:11:17 2024
+
+ Username: mamad2
+ Map: test3
+ Time spent: 12s
+ Result: Lose!
+-----------------------------------------
+
+date & time: Tue Jan 23 14:12:24 2024
+
+ Username: mamad2
+ Map: test2
+ Time spent: 6s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:21:38 2024
+
+ Username: reza1
+ Map: test1
+ Time spent: 29s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:25:29 2024
+
+ Username: reza1
+ Map: test1
+ Time spent: 5s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:27:03 2024
+
+ Username: mamad2
+ Map: test2
+ Time spent: 48s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:28:52 2024
+
+ Username: reza1
+ Map: test3
+ Time spent: 10s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:30:47 2024
+
+ Username: reza1
+ Map: test1
+ Time spent: 6s
+ Result: Win!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:33:31 2024
+
+ Username: reza1
+ Map: test1
+ Time spent: 26s
+ Result: Lose!
+-----------------------------------------
+
+date & time: Tue Jan 23 21:37:19 2024
+
+ Username: hamidreza1
+ Map: test1
+ Time spent: 5s[32m
+ Result: Win![0m
+-----------------------------------------
+

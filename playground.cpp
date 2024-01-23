@@ -15,6 +15,7 @@ void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves,
 void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves);
 bool customSort (int a, int b);
 void addHistory (char dt, string globalUsername, string globalMapname, int time1, bool winOrLose);
+void showHistory (int mode);
 void leaderboard (string username);
 void playground (int t);
 struct player
@@ -26,7 +27,18 @@ struct player
 
 int main()
 {
-    playground(2);
+    cout << "\033[36m" << "Game started" << "\033[0m\n";
+    cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit";
+    int mode;
+    cin >> mode;
+    if (mode == 2)
+        playground(2);
+    else if (mode == 4)
+        showHistory(2);
+    else if (mode == 5)
+        showLeaderboard(2);
+    if (mode == 6)
+        exit(0);
 }
 // Playground:
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
@@ -58,7 +70,7 @@ bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder
     int sum = 0;
     for (int i = 0; i < xHolder.size()-1; i++)
         sum += map[xHolder[i]][yHolder[i]];
-    if (map[row-1][column-1] == sum)
+    if (map[row-1][column-1] == sum && xHolder[xHolder.size()-1] == row-1 && yHolder[yHolder.size()-1] == column-1)
         return true;
     else
         return false;
@@ -88,10 +100,17 @@ void addHistory (char* dt, string globalUsername, string globalMapname, int time
     ofstream history ("states/history.txt", ios::app);
     history << "date & time: " << dt << "\n Username: " << globalUsername << "\n Map: " << globalMapname << "\n Time spent: " << time1 << "s";
     if (winOrLose == true)
-        history << "\n Result: Win!\n";
+        history << "\033[32m" << "\n Result: Win!" << "\033[0m\n";
     else
-        history << "\n Result: Lose!\n";
+        history << "\033[31m" << "\n Result: Lose!" << "\033[0m\n";
     history << "-----------------------------------------\n\n";
+}
+void showHistory (int t)
+{
+    ifstream showHistory ("states/history.txt");
+    string lineHistory;
+    while (getline(showHistory, lineHistory))
+        cout << lineHistory << endl;
 }
 void leaderboard (vector<player>& players)
 {
@@ -106,12 +125,22 @@ void leaderboard (vector<player>& players)
         for (int i = 0; i < players.size(); i++)
             leader << i+1 << ". " << players[i].username << " with " << players[i].wins << " wins in " << players[i].time << "s\n";
 }
+void showLeaderboard (int t)
+{
+    ifstream showLeaderboard ("states/leaderboard.txt");
+    string lineLeaderboard;
+    while (getline(showLeaderboard, lineLeaderboard))
+        cout << lineLeaderboard << endl;
+}
 void playground (int t)
 {
+    cout << "Playground" << endl;
     int row, column, customOrImport;
-    cout << "Enter row & column:" << endl;
-            cin >> row >> column;
-    cout << "Playground" << endl << "\t 1.Choose from existing maps" << endl << "\t 2.Import my custom map" << endl;
+    cout << "Enter row: ";
+    cin >> row;
+    cout << "Enter column: ";
+    cin >> column;
+    cout << "\t 1.Choose from existing maps" << endl << "\t 2.Import my custom map" << endl;
     cin >> customOrImport;
     int** map = new int*[row];
     for (int i = 0; i < row; i++)
@@ -133,7 +162,7 @@ void playground (int t)
                 inputAddress >> map[i][j];
         }
     }
-    else
+    else if (customOrImport == 1)
     {
         DIR *dr;
         struct dirent *en;
@@ -154,6 +183,11 @@ void playground (int t)
             for (int j = 0; j < column; j++)
                 inputName >> map[i][j];
         }
+    }
+    else
+    {
+        cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
+        exit(0);
     }
     cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
     int profile;
@@ -193,7 +227,8 @@ void playground (int t)
     vector<player> players;
     player st;
     int timeBase = time(0), time1, sumTime;
-    cout << "Time started\n";
+    cout << "\033[36m" << "Valid inputs:\n\tW for up\n\tS for down\n\tA for left\n\tD for right\n\tB for back\n\tT for time\n\tE for give up!\nL for movelist" << "\033[0m\n\n";
+    cout << "\033[33m" << "Time started" << "\033[0m\n";
     time_t now = time(0); // get current dat/time with respect to system  
     char* dt = ctime(&now); // convert it into string
     for (int i = 0; i < row; i++)
@@ -323,7 +358,7 @@ void playground (int t)
         }
         else if (move == 'T')
         {
-            cout << "time = " << time1 << "s" << endl;
+            cout << "\033[33m" << "time = " << time1 << "s" << "\033[0m\n";
         }
         else if (move == 'E')
         {
@@ -360,6 +395,16 @@ void playground (int t)
                     break;
                 }
             }
+        }
+        else if (move == 'L')
+        {
+            cout << "\033[36m" << "Valid inputs:\n\tW for up\n\tS for down\n\tA for left\n\tD for right\n\tB for back\n\tT for time\n\tE for give up!\nL for movelist" << "\033[0m\n";
+        }
+        else
+        {
+            cout << "\033[31m" << "Invalid input, please enter from this list (W , A , S , D , T , E)" << "\033[0m" << endl;
+            cout << "\033[36m" << "You can see movelist by pressing L" << "\033[0m\n\n";
+            continue;
         }
     }
     ifstream inputForLeaderboard ("users/users.txt");

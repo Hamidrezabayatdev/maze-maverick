@@ -1,0 +1,6 @@
+3 2 48 66
+
+All games: 3
+Wins: 2
+Final win time: 48s
+All games time: 66s
