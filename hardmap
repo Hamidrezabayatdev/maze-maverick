@@ -1,0 +1,47 @@
+#include<iostream>
+#include<iomanip>
+#include<fstream>
+#include<vector>
+#include <algorithm>
+#include <random>
+#include<ctime>
+using namespace std;
+
+    char movepicker(){
+    switch(rand()%4+1){
+    case 1: return('a');
+    case 2: return('s');
+    case 3: return('d');
+    case 4: return('w');
+        }
+    }
+
+int main(){
+
+    srand(time(0));
+    int x9, y9;
+    cout << "Enter row & column:" << endl;
+    cin >> x9 >> y9;
+    int map9[x9][y9];
+    int pathlength;
+    cout << "Enter the path length:" << endl;
+    cin >> pathlength;
+    int minpathlength = x9+y9-2;
+    int extrapathlength = pathlength-minpathlength;
+
+    if((x9%2!=0)||(y9%2!=0)){
+        while(((pathlength-minpathlength)%2!=0)||(pathlength<minpathlength)|| (pathlength>(x9*y9-1))){
+            cout << "Invalid path length!" << endl << "Enter a valid one:" << endl;
+            cin >> pathlength;
+        }
+    }
+
+    else{
+         while(((pathlength-minpathlength)%2!=0)||(pathlength<minpathlength)|| (pathlength>x9*y9-2)){
+            cout << "Invalid path length!" << endl << "Enter a valid one:" << endl;
+            cin >> pathlength;
+        }
+    }
+
+    return 0;
+}
