@@ -192,3 +192,51 @@ date & time: Tue Jan 23 22:42:48 2024
  Result: Win![0m
 -----------------------------------------
 
+date & time: Tue Jan 23 23:10:47 2024
+
+ Username: Amin
+ Map: test2
+ Time spent: 69s[32m
+ Result: Win![0m
+-----------------------------------------
+
+date & time: Wed Jan 24 11:17:14 2024
+
+ Username: mamad2
+ Map: test2
+ Time spent: 19s[32m
+ Result: Win![0m
+-----------------------------------------
+
+date & time: Wed Jan 24 11:19:10 2024
+
+ Username: Ali
+ Map: 910easy
+ Time spent: 16s[31m
+ Result: Lose![0m
+-----------------------------------------
+
+date & time: Wed Jan 24 11:23:14 2024
+
+ Username: Ali
+ Map: 910easy
+ Time spent: 47s[31m
+ Result: Lose![0m
+-----------------------------------------
+
+date & time: Wed Jan 24 11:32:40 2024
+
+ Username: alereza
+ Map: 910easy
+ Time spent: 19s[31m
+ Result: Lose![0m
+-----------------------------------------
+
+date & time: Wed Jan 24 11:34:04 2024
+
+ Username: alereza
+ Map: 910easy
+ Time spent: 14s[31m
+ Result: Lose![0m
+-----------------------------------------
+

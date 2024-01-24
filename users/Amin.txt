@@ -1,0 +1,6 @@
+1 1 69 69
+
+All games: 1
+Wins: 1
+Final win time: 69s
+All games time: 69s

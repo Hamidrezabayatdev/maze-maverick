@@ -53,8 +53,9 @@ int main()
         if (anyelse == 1)
             cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit\n";
         else
-            exit(0);
+            break;
     } while (mode != 6);
+    cout << "\033[36m" << "Happy to see U:)" << "\033[0m\n";
     exit(0);
 }
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
@@ -290,7 +291,7 @@ void playground (int t)
         {
             if (moves[moves.size()-1] == 'G')
             {
-                cout << "You can't go back at the first place\n";
+                cout << "\033[31m" << "You can't go back at the first place" << "\033[0m\n";
                 continue;
             }
             else if (moves[moves.size()-1] == 'D')
@@ -331,8 +332,10 @@ void playground (int t)
                     pushbacks (xHolder, yHolder, moves, move, x, y);
                     printMap(row, column, xHolder, yHolder, map);
                 }
-                else
+                else{
+                    cout << "\033[31m" << "There is a block on your right side" << "\033[0m\n";
                     continue;
+                }
             }
             else
             {
@@ -343,8 +346,18 @@ void playground (int t)
         }
         else if (move == 'A')
         {
-            if (y == 0 || (map[x][y-1] == 0) || moves[moves.size()-1] == 'D')
+            if (y == 0)
                 continue;
+            else if (map[x][y-1] == 0)
+            {
+                cout << "\033[31m" << "There is a block on your left side" << "\033[0m\n";
+                continue;
+            }
+            else if (moves[moves.size()-1] == 'D')
+            {
+                cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
+                continue;
+            }
             else
             {
                 y --;
@@ -354,8 +367,14 @@ void playground (int t)
         }
         else if (move == 'S')
         {
-            if (x == row-1 || moves[moves.size()-1] == 'W')
+            if (x == row-1)
                 continue;
+            else if (moves[moves.size()-1] == 'W')
+            {
+                cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
+                continue;
+            }
+            
             else if ((map[x+1][y] == 0))
             {
                 if (x == row-2 && y == column-1)
@@ -365,7 +384,10 @@ void playground (int t)
                     printMap(row, column, xHolder, yHolder, map);
                 }
                 else
+                {
+                    cout << "\033[31m" << "There is a block on down there" << "\033[0m\n";
                     continue;
+                }
             }
             else
             {
@@ -376,8 +398,19 @@ void playground (int t)
         }
         else if (move == 'W')
         {
-            if (x == 0 || (map[x-1][y] == 0) || moves[moves.size()-1] == 'S')
+            if (x == 0)
                 continue;
+            else if (map[x-1][y] == 0)
+            {
+                cout << "\033[31m" << "There is a block on up there" << "\033[0m\n";
+                continue;
+            }
+            else if (moves[moves.size()-1] == 'S')
+            {
+                cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
+                continue;
+            }
+            
             else
             {
                 x --;
@@ -420,7 +453,7 @@ void playground (int t)
                     addHistory (dt, globalUsername, globalMapname, time1, winOrLose);
                     user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
                     user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
-                    cout << "time = " << time1 << "s" << endl << "Game ended" << endl;
+                    cout << "\033[33m" << "time = " << time1 << "s" << "\033[0m" << endl << "\033[36m" << "Game ended" << "\033[0m" << endl;
                     break;
                 }
             }
