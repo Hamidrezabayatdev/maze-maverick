@@ -19,6 +19,7 @@ void leaderboard (string username);
 void showLeaderboard (int t);
 void easyMapCreate (int t);
 void playground (int t);
+bool usercheck (string username);
 struct player
 {
     string username;
@@ -226,18 +227,18 @@ void playground (int t)
     int allGames = 0, wins = 0, finalWinTime = 0, allTime = 0;
     if (profile == 1)
     {
-        DIR *dr;
-        struct dirent *en;
-        dr = opendir("users/"); //open all directory
-        if (dr) {
-           while ((en = readdir(dr)) != NULL) {
-              cout<<" \n"<<en->d_name; //print all directory name
-           }
-           closedir(dr); //close all directory
-        }
+        ifstream userList ("users/users.txt");
+        string userListName;
+        while (userList >> userListName)
+            cout << userListName << endl;
         cout << "please enter your username (\033[31mdo not enter 'users'\033[0m): ";
         string username;
         cin >> username;
+        while (usercheck(username) == false)
+        {
+            cout << "\033[31m" << "User not found!\nPlease enter an existing User" << "\033[0m\n";
+            cin >> username;
+        }
         globalUsername = username;
         ifstream user ("users/" +username+ ".txt");
         user >> allGames >> wins >> finalWinTime >> allTime;
@@ -246,7 +247,6 @@ void playground (int t)
     {
     cout << "please enter your username (\033[31mdo not enter 'users'\033[0m): ";
     string username;
-    cin >> username;
     globalUsername = username;
     ofstream firstUser ("users/" +username+ ".txt");
     firstUser << "0" << " " << "0" << " " << "0" << " " << "0" << endl;
@@ -482,6 +482,17 @@ void playground (int t)
         players.push_back(st);
     }
     leaderboard (players);
+}
+bool usercheck (string username)
+{
+    ifstream userCheck ("users/users.txt");
+    string userTemp;
+    while (userCheck >> userTemp)
+    {
+        if (userTemp == username)
+            return true;
+    }
+    return false;
 }
 void easyMapCreate (int t)
 {
