@@ -20,6 +20,7 @@ void showLeaderboard (int t);
 void easyMapCreate (int t);
 void playground (int t);
 bool usercheck (string username);
+bool mapcheck (string name);
 struct player
 {
     string username;
@@ -195,18 +196,18 @@ void playground (int t)
     }
     else if (customOrImport == 1)
     {
-        DIR *dr;
-        struct dirent *en;
-        dr = opendir("maps/"); //open all directory
-        if (dr) {
-           while ((en = readdir(dr)) != NULL) {
-              cout<<" \n"<<en->d_name; //print all directory name
-           }
-           closedir(dr); //close all directory
-        }
+        ifstream mapList ("maps/maps.txt");
+        string mapListName;
+        while (mapList >> mapListName)
+            cout << mapListName << endl;
         cout << endl << "Enter your map Name (exp. Map1): ";
         string name;
         cin >> name;
+        while (mapcheck(name) == false)
+        {
+            cout << "\033[31m" << "Map not found!\nPlease enter an existing map" << "\033[0m\n";
+            cin >> name;
+        }
         globalMapname = name;
         ifstream inputName ("maps/" +name+ ".txt");
         for (int i = 0; i < row; i++)
@@ -231,7 +232,7 @@ void playground (int t)
         string userListName;
         while (userList >> userListName)
             cout << userListName << endl;
-        cout << "please enter your username (\033[31mdo not enter 'users'\033[0m): ";
+        cout << "please enter your username: ";
         string username;
         cin >> username;
         while (usercheck(username) == false)
@@ -247,6 +248,7 @@ void playground (int t)
     {
     cout << "please enter your username (\033[31mdo not enter 'users'\033[0m): ";
     string username;
+    cin >> username;
     globalUsername = username;
     ofstream firstUser ("users/" +username+ ".txt");
     firstUser << "0" << " " << "0" << " " << "0" << " " << "0" << endl;
@@ -494,6 +496,17 @@ bool usercheck (string username)
     }
     return false;
 }
+bool mapcheck (string mapname)
+{
+    ifstream mapCheck ("maps/maps.txt");
+    string mapTemp;
+    while (mapCheck >> mapTemp)
+    {
+        if (mapTemp == mapname)
+            return true;
+    }
+    return false;
+}
 void easyMapCreate (int t)
 {
     srand(time(0));
@@ -580,6 +593,8 @@ void easyMapCreate (int t)
     string mapName;
     cin >> mapName;
     ofstream output ("maps/" +mapName+ ".txt");
+    ofstream saveName ("maps/maps.txt", ios::app);
+    saveName << mapName << "\t";
     map[x-1][y-1] = sum;
     cout << "\033[32m" << "Your map has been successfully created and saved like this: \n" << "\033[0m";
     for (int i = 0; i < x; i++)
