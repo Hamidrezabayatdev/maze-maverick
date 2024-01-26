@@ -1,0 +1,6 @@
+1 1 34 34
+
+All games: 1
+Wins: 1
+Final win time: 34s
+All games time: 34s

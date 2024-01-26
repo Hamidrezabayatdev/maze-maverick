@@ -1,0 +1,16 @@
+date & time: Fri Jan 26 22:38:26 2024
+
+ Username: hamidreza
+ Map: first-hard
+ Time spent: 11s[31m
+ Result: Lose![0m
+-----------------------------------------
+
+date & time: Fri Jan 26 22:54:11 2024
+
+ Username: alireza
+ Map: third-hard-try
+ Time spent: 34s[32m
+ Result: Win![0m
+-----------------------------------------
+

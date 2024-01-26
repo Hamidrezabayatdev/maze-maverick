@@ -615,7 +615,7 @@ void easyMapCreate (int t)
         cout << endl;
     }
 }
-bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy ){
+bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy){
     for(int i=0;i<mypath.size();i++){
         if(elementx == mypath[i].first && elementy == mypath[i].second)
             return true;
@@ -683,6 +683,11 @@ void hardMap (int t)
     cin >> Al >> Au;
     cout << "Enter min blocks & max blocks: ";
     cin >> Bl >> Bu;
+    while (Bu > (ROW*COL)-len)
+    {
+        cout << "\033[31m" << "max blocks has to be lower than that! enter something else:" << "\033[0m\n";
+        cin >> Bu;
+    }
     vector<pair<int, int>> path;
     int blocksNumber = rand()% (Bu - Bl +1) + Bl;
     int otherNumbersCounter = (ROW*COL)-len;
@@ -750,4 +755,15 @@ void hardMap (int t)
         output << endl;
         cout << endl;
     }
+    cout << "Do you want to see our recommended path?\n\t1.Yes\n\t2.No\n";
+    int recommendedPath;
+    cin >> recommendedPath;
+    if (recommendedPath == 1)
+    {
+        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++){
+            cout << "(" << pathscontainer[randompathindx][i].first << "," << pathscontainer[randompathindx][i].second << ")" << " , ";
+        }
+        cout << "and the target place" << endl;
+    }
+    
 }
