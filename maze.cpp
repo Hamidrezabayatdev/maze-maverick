@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 using namespace std;
+vector<vector<pair<int, int> > > pathscontainer;
 void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map);
 void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y);
@@ -21,6 +22,10 @@ void easyMapCreate (int t);
 void playground (int t);
 bool usercheck (string username);
 bool mapcheck (string name);
+bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy );
+void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, int COL, int** map);
+bool tekrar (int tmp);
+void hardMap (int t);
 struct player
 {
     string username;
@@ -42,6 +47,8 @@ int main()
             cin >> level;
             if (level == 1)
                 easyMapCreate(2);
+            else if (level == 2)
+                hardMap(2);
         }
         else if (mode == 2)
             playground(2);
@@ -600,6 +607,142 @@ void easyMapCreate (int t)
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
+        {
+            cout << setw(3) << map[i][j] << "  ";
+            output << setw(3) << map[i][j] << "  ";
+        }
+        output << endl;
+        cout << endl;
+    }
+}
+bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy ){
+    for(int i=0;i<mypath.size();i++){
+        if(elementx == mypath[i].first && elementy == mypath[i].second)
+            return true;
+    }
+    return false;
+}
+void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, int COL, int** map) {
+    if (x < 0 || x >= ROW || y < 0 || y >= COL || len < 0 || map[x][y] == -1) {
+        return;
+    }
+    else if (len == 0 && x == ROW - 1 && y == COL - 1) {
+        path.push_back({x, y});
+        pathscontainer.push_back(path);
+        //for (auto p : path){
+         // //  cout << "(" << p.first << ", " << p.second << ") ";
+        ////}
+        path.pop_back();
+        return;
+    }
+    path.push_back({x, y});
+    // map[x][y] = -1;
+    findPath( x + 1, y, len - 1, path, ROW, COL, map);
+    findPath( x - 1, y, len - 1, path, ROW, COL, map);
+    findPath( x, y + 1, len - 1, path, ROW, COL, map);
+    findPath( x, y - 1, len - 1, path, ROW, COL, map);
+
+    // map[x][y] = 1;
+    path.pop_back();
+}
+bool tekrar (int tmp)
+
+{
+        for (int j = 0; j < pathscontainer[tmp].size(); j++)
+        {
+            for (int k = j+1; k < pathscontainer[tmp].size(); k++)
+            {
+                if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+}
+void hardMap (int t)
+{
+    srand(time(0));
+    int ROW, COL, len;
+    cout << "Enter row: ";
+    cin >> ROW;
+    cout << "Enter column: ";
+    cin >> COL;
+    cout << "Enter path length: ";
+    cin >> len;
+    int** map = new int*[ROW];
+    for (int i = 0; i < ROW; i++)
+        map[i] = new int[COL];
+    for(int i=0;i<ROW;i++){
+        for(int j=0;j<COL;j++){
+            map[i][j]= 800;
+        }
+    }
+    int Al, Au, Bl, Bu;
+    cout << "Enter min & max: ";
+    cin >> Al >> Au;
+    cout << "Enter min blocks & max blocks: ";
+    cin >> Bl >> Bu;
+    vector<pair<int, int>> path;
+    int blocksNumber = rand()% (Bu - Bl +1) + Bl;
+    int otherNumbersCounter = (ROW*COL)-len;
+    vector<int> otherNumbers;
+    for (int i = 0; i < blocksNumber; i++)
+    {
+        otherNumbers.push_back(0);
+    }
+    for (int i = blocksNumber; i < otherNumbersCounter; i++)
+    {
+            otherNumbers.push_back(rand()%(Au - Al + 1) + Al);
+            while (otherNumbers[i] == 0)
+            {
+                otherNumbers[i] = rand()%(Au - Al + 1) + Al;
+            }  
+    }
+    random_shuffle(otherNumbers.begin(), otherNumbers.end());
+    findPath( 0, 0, len, path, ROW, COL, map);
+    int s = 0;
+    int randompathindx = rand()% pathscontainer.size();
+    while (tekrar(randompathindx) == false)
+    {
+        randompathindx = rand()% pathscontainer.size();
+    }
+    for(int i=0;i<pathscontainer[randompathindx].size()-1;i++){
+            int randomelement = rand()%(Au - Al + 1) + Al;
+    while(randomelement == 0){
+        randomelement =rand()% (Au - Al +1) + Al;
+    }
+        map[pathscontainer[randompathindx][i].first][pathscontainer[randompathindx][i].second] = randomelement;
+        s+= map[pathscontainer[randompathindx][i].first][pathscontainer[randompathindx][i].second];
+    }
+    map[ROW - 1][COL - 1] = s;
+    for(int i=0; i<pathscontainer[randompathindx].size(); i++){
+        cout << pathscontainer[randompathindx][i].first << "  " << pathscontainer[randompathindx][i].second << endl;
+    }
+    int otherNumbersCounterFor = 0;
+    for(int i=0 ; i<ROW ;i++){
+        for(int j=0;j<COL;j++){
+            if(isIn (pathscontainer[randompathindx], i, j) == false)
+            {
+                map[i][j] = otherNumbers[otherNumbersCounterFor];
+                otherNumbersCounterFor++;
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+    cout << "Enter your map file name: ";
+    string mapName;
+    cin >> mapName;
+    ofstream output ("maps/" +mapName+ ".txt");
+    ofstream saveName ("maps/maps.txt", ios::app);
+    saveName << mapName << "\t";
+    cout << "\033[32m" << "Your map has been successfully created and saved like this: \n" << "\033[0m";
+    for (int i = 0; i < ROW; i++)
+    {
+        for (int j = 0; j < COL; j++)
         {
             cout << setw(3) << map[i][j] << "  ";
             output << setw(3) << map[i][j] << "  ";
