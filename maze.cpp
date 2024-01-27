@@ -67,3 +67,49 @@ int main()
     cout << "\033[36m" << "Happy to see U:)" << "\033[0m\n";
     exit(0);
 }
+void printMap (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            int temp = 0;
+            for (int k = 0; k < xHolder.size(); k++)
+            {
+                if (i == xHolder[k] && j == yHolder[k])
+                    temp++;
+            }
+                if (temp > 0)
+                {
+                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                }
+                else
+                {
+                    cout << setw(3) <<  map[i][j] << "  ";
+                }
+        }
+        cout << endl;
+    }
+}
+bool winningState (int row, int column, vector<int> xHolder, vector<int> yHolder, int** map)
+{
+    int sum = 0;
+    for (int i = 0; i < xHolder.size()-1; i++)
+        sum += map[xHolder[i]][yHolder[i]];
+    if (map[row-1][column-1] == sum && xHolder[xHolder.size()-1] == row-1 && yHolder[yHolder.size()-1] == column-1)
+        return true;
+    else
+        return false;
+}
+void pushbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves, char move, int x, int y)
+{
+    moves.push_back(move);
+    xHolder.push_back(x);
+    yHolder.push_back(y);
+}
+void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
+{
+    xHolder.pop_back();
+    yHolder.pop_back();
+    moves.pop_back();
+}
