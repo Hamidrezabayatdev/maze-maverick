@@ -2,7 +2,7 @@
 #include<iomanip>
 #include<fstream>
 #include<vector>
-#include <algorithm>
+#include <algorithm>    
 #include <random>
 #include<ctime>
 #include <dirent.h>
@@ -32,3 +32,38 @@ struct player
     int wins;
     int time;
 };
+int main()
+{
+    cout << "\033[36m" << "Game started" << "\033[0m\n";
+    cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit\n";
+    int mode;
+    do
+    {
+        cin >> mode;
+        if (mode == 1)
+        {
+            cout << "\t1.1 Easy\n\t1.2 Hard\n";
+            int level;
+            cin >> level;
+            if (level == 1)
+                easyMapCreate(2);
+            else if (level == 2)
+                hardMap(2);
+        }
+        else if (mode == 2)
+            playground(2);
+        else if (mode == 4)
+            showHistory(2);
+        else if (mode == 5)
+            showLeaderboard(2);
+        cout << "\033[36m" << "\nDo you want to do anything else?\n\t1.Yes\n\t2.No" << "\033[0m\n";
+        int anyelse;
+        cin >> anyelse;
+        if (anyelse == 1)
+            cout << "1. Create a new map\n2. Playground\n3. Solve a maze\n4. History\n5. Leaderboard\n6. Exit\n";
+        else
+            break;
+    } while (mode != 6);
+    cout << "\033[36m" << "Happy to see U:)" << "\033[0m\n";
+    exit(0);
+}
