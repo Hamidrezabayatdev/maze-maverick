@@ -113,3 +113,49 @@ void popbacks (vector<int>& xHolder, vector<int>& yHolder, vector<char>& moves)
     yHolder.pop_back();
     moves.pop_back();
 }
+bool customsort (player& a, player& b)
+{
+    if (a.wins != b.wins)
+        return a.wins > b.wins;
+    else
+        return a.time < b.time;
+
+}
+void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
+{
+    ofstream history ("states/history.txt", ios::app);
+    history << "date & time: " << dt << "\n Username: " << globalUsername << "\n Map: " << globalMapname << "\n Time spent: " << time1 << "s";
+    if (winOrLose == true)
+        history << "\033[32m" << "\n Result: Win!" << "\033[0m\n";
+    else
+        history << "\033[31m" << "\n Result: Lose!" << "\033[0m\n";
+    history << "-----------------------------------------\n\n";
+}
+void showHistory (int t)
+{
+    ifstream showHistory ("states/history.txt");
+    string lineHistory;
+    while (getline(showHistory, lineHistory))
+        cout << lineHistory << endl;
+}
+void leaderboard (vector<player>& players)
+{
+    ofstream leader ("states/leaderboard.txt");
+    sort (players.begin(), players.end(), customsort);
+    if (players.size() >= 3)
+    {
+        for (int i = 0; i < 3; i++)
+            leader << i+1 << ". " << players[i].username << " with " << players[i].wins << " wins in " << players[i].time << "s\n";
+    }
+    else
+        for (int i = 0; i < players.size(); i++)
+            leader << i+1 << ". " << players[i].username << " with " << players[i].wins << " wins in " << players[i].time << "s\n";
+}
+void showLeaderboard (int t)
+{
+    cout << "\033[36m" << "Leaderboard:" << "\033[0m\n";
+    ifstream showLeaderboard ("states/leaderboard.txt");
+    string lineLeaderboard;
+    while (getline(showLeaderboard, lineLeaderboard))
+        cout << lineLeaderboard << endl;
+}
