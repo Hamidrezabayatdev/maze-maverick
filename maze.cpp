@@ -492,3 +492,25 @@ void playground (int t)
     }
     leaderboard (players);
 }
+bool usercheck (string username)
+{
+    ifstream userCheck ("users/users.txt");
+    string userTemp;
+    while (userCheck >> userTemp)
+    {
+        if (userTemp == username)
+            return true;
+    }
+    return false;
+}
+bool mapcheck (string mapname)
+{
+    ifstream mapCheck ("maps/maps.txt");
+    string mapTemp;
+    while (mapCheck >> mapTemp)
+    {
+        if (mapTemp == mapname)
+            return true;
+    }
+    return false;
+}
