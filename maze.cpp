@@ -2,7 +2,7 @@
 #include<iomanip>
 #include<fstream>
 #include<vector>
-#include <algorithm>    
+#include <algorithm>
 #include <random>
 #include<ctime>
 #include <dirent.h>
@@ -52,6 +52,55 @@ int main()
         }
         else if (mode == 2)
             playground(2);
+        else if (mode==3){
+        	cout<<"1.choose from existing maps\n2.import a custom map"<<endl;
+        	int userinput ;
+        	cin>>userinput;
+        	if(userinput == 1){
+
+			}
+			else if(userinput ==2){
+				int m , n;
+				cout<<"enter the dimension of your custom map"<<endl;
+				cin>>m>>n;
+				cout<<"enter the length of the path you want"<<endl;
+				int yourlen ;
+				cin>>yourlen;
+				int** yourmap = new int*[m];
+    			for (int i = 0; i < m; i++){
+    				yourmap[i] = new int[n];
+				}
+
+				cout<<"initialize the map elements in order"<<endl;
+				for(int i=0;i<m;i++){
+					for(int j=0;j<n;j++){
+						cin>>yourmap[i][j];
+					}
+				}
+				vector<pair<int , int> > yourpath;
+				int ansindex ;
+				findPath(0,0,yourlen, yourpath, m, n, yourmap);
+				bool pathexists =false;
+				for(int i=0;i<pathscontainer.size();i++){
+					int temsum=0;
+					if(tekrar(i)==true){
+						for(int j=0;j<pathscontainer[i].size()-1;j++){
+							temsum+=yourmap[pathscontainer[i][j].first][pathscontainer[i][j].second];
+						}
+						if (temsum == yourmap[m-1][n-1]){
+							pathexists = true;
+							ansindex = i;
+							break;
+
+						}
+					}
+				}
+				if (pathexists == false){
+					cout<<"such a path doesn't exist!"<<endl;
+				}
+
+			}
+		}
         else if (mode == 4)
             showHistory(2);
         else if (mode == 5)
