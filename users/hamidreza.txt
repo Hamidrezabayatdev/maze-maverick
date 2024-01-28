@@ -1,0 +1,6 @@
+1 0 0 20
+
+All games: 1
+Wins: 0
+Final win time: 0s
+All games time: 20s
