@@ -78,3 +78,11 @@ date & time: Sun Jan 28 20:23:33 2024
  Result: Win![0m
 -----------------------------------------
 
+date & time: Sun Jan 28 20:50:43 2024
+
+ Username: sss
+ Map: 448test
+ Time spent: 3s[31m
+ Result: Lose![0m
+-----------------------------------------
+

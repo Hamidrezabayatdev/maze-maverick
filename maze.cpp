@@ -185,7 +185,7 @@ void playground (int t)
         if (inputAddress.fail())
         {
             cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
-            exit(0);
+            return;
         }
         cout << endl << "Enter your map Name (exp. Map1): ";
         string name;
@@ -234,7 +234,7 @@ void playground (int t)
     else
     {
         cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
-        exit(0);
+        return;
     }
     cout << "\033[36m" << "Do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No" << "\033[0m\n";
     int profile;
