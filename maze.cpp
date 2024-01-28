@@ -182,6 +182,11 @@ void playground (int t)
         cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): \n";
         cin >> address;
         ifstream inputAddress (address);
+        if (inputAddress.fail())
+        {
+            cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
+            exit(0);
+        }
         cout << endl << "Enter your map Name (exp. Map1): ";
         string name;
         cin >> name;
@@ -231,7 +236,7 @@ void playground (int t)
         cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
         exit(0);
     }
-    cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
+    cout << "\033[36m" << "Do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No" << "\033[0m\n";
     int profile;
     cin >> profile;
     string globalUsername;
@@ -299,32 +304,32 @@ void playground (int t)
         cin >> move;
         time1 = time(0) - timeBase;
         sumTime += time1;
-        if (move == 'B')
+        if (move == 'B' || move == 'b')
         {
             if (moves[moves.size()-1] == 'G')
             {
                 cout << "\033[31m" << "You can't go back at the first place" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'D')
+            else if (moves[moves.size()-1] == 'D' || moves[moves.size()-1] == 'd')
             {
                 y --;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'A')
+            else if (moves[moves.size()-1] == 'A' || moves[moves.size()-1] == 'a')
             {
                 y ++;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'S')
+            else if (moves[moves.size()-1] == 'S' || moves[moves.size()-1] == 's')
             {
                 x --;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'W')
+            else if (moves[moves.size()-1] == 'W' || moves[moves.size()-1] == 'w')
             {
                 x ++;
                 popbacks (xHolder, yHolder, moves);
@@ -332,9 +337,9 @@ void playground (int t)
             }
         }
         
-        else if (move == 'D')
+        else if (move == 'D' || move == 'd')
         {
-            if (y == column-1 || moves[moves.size()-1] == 'A')
+            if (y == column-1 || moves[moves.size()-1] == 'A' || moves[moves.size()-1] == 'a')
                 continue;
             else if ((map[x][y+1] == 0))
             {
@@ -356,7 +361,7 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'A')
+        else if (move == 'A' || move == 'a')
         {
             if (y == 0)
                 continue;
@@ -365,7 +370,7 @@ void playground (int t)
                 cout << "\033[31m" << "There is a block on your left side" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'D')
+            else if (moves[moves.size()-1] == 'D' || moves[moves.size()-1] == 'd')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
@@ -377,11 +382,11 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'S')
+        else if (move == 'S' || move == 's')
         {
             if (x == row-1)
                 continue;
-            else if (moves[moves.size()-1] == 'W')
+            else if (moves[moves.size()-1] == 'W' || moves[moves.size()-1] == 'w')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
@@ -397,7 +402,7 @@ void playground (int t)
                 }
                 else
                 {
-                    cout << "\033[31m" << "There is a block on down there" << "\033[0m\n";
+                    cout << "\033[31m" << "There is a block down there" << "\033[0m\n";
                     continue;
                 }
             }
@@ -408,16 +413,16 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'W')
+        else if (move == 'W' || move == 'w')
         {
             if (x == 0)
                 continue;
             else if (map[x-1][y] == 0)
             {
-                cout << "\033[31m" << "There is a block on up there" << "\033[0m\n";
+                cout << "\033[31m" << "There is a block up there" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'S')
+            else if (moves[moves.size()-1] == 'S' || moves[moves.size()-1] == 's')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
@@ -430,11 +435,11 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'T')
+        else if (move == 'T' || move == 't')
         {
             cout << "\033[33m" << "time = " << time1 << "s" << "\033[0m\n";
         }
-        else if (move == 'E')
+        else if (move == 'E' || move == 'e')
         {
             if (winningState(row, column, xHolder, yHolder, map) == true)
             {
@@ -470,7 +475,7 @@ void playground (int t)
                 }
             }
         }
-        else if (move == 'L')
+        else if (move == 'L' || move == 'l')
         {
             cout << "\033[36m" << "Valid inputs:\n\tW for up\n\tS for down\n\tA for left\n\tD for right\n\tB for back\n\tT for time\n\tE for end or give up!" << "\033[0m\n";
         }
