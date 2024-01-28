@@ -660,3 +660,110 @@ bool tekrar (int tmp)
         }
         return true;
 }
+void hardMap (int t)
+{
+    srand(time(0));
+    int ROW, COL, len;
+    cout << "Enter row: ";
+    cin >> ROW;
+    cout << "Enter column: ";
+    cin >> COL;
+    cout << "Enter path length: ";
+    cin >> len;
+    int** map = new int*[ROW];
+    for (int i = 0; i < ROW; i++)
+        map[i] = new int[COL];
+    for(int i=0;i<ROW;i++){
+        for(int j=0;j<COL;j++){
+            map[i][j]= 800;
+        }
+    }
+    int Al, Au, Bl, Bu;
+    cout << "Enter min & max: ";
+    cin >> Al >> Au;
+    cout << "Enter min blocks & max blocks: ";
+    cin >> Bl >> Bu;
+    while (Bu > (ROW*COL)-len)
+    {
+        cout << "\033[31m" << "max blocks has to be lower than that! enter something else:" << "\033[0m\n";
+        cin >> Bu;
+    }
+    vector<pair<int, int>> path;
+    int blocksNumber = rand()% (Bu - Bl +1) + Bl;
+    int otherNumbersCounter = (ROW*COL)-len;
+    vector<int> otherNumbers;
+    for (int i = 0; i < blocksNumber; i++)
+    {
+        otherNumbers.push_back(0);
+    }
+    for (int i = blocksNumber; i < otherNumbersCounter; i++)
+    {
+            otherNumbers.push_back(rand()%(Au - Al + 1) + Al);
+            while (otherNumbers[i] == 0)
+            {
+                otherNumbers[i] = rand()%(Au - Al + 1) + Al;
+            }
+    }
+    random_shuffle(otherNumbers.begin(), otherNumbers.end());
+    findPath( 0, 0, len, path, ROW, COL, map);
+    int s = 0;
+    int randompathindx = rand()% pathscontainer.size();
+    while (tekrar(randompathindx) == false)
+    {
+        randompathindx = rand()% pathscontainer.size();
+    }
+    for(int i=0;i<pathscontainer[randompathindx].size()-1;i++){
+            int randomelement = rand()%(Au - Al + 1) + Al;
+    while(randomelement == 0){
+        randomelement =rand()% (Au - Al +1) + Al;
+    }
+        map[pathscontainer[randompathindx][i].first][pathscontainer[randompathindx][i].second] = randomelement;
+        s+= map[pathscontainer[randompathindx][i].first][pathscontainer[randompathindx][i].second];
+    }
+    map[ROW - 1][COL - 1] = s;
+    for(int i=0; i<pathscontainer[randompathindx].size(); i++){
+        cout << pathscontainer[randompathindx][i].first << "  " << pathscontainer[randompathindx][i].second << endl;
+    }
+    int otherNumbersCounterFor = 0;
+    for(int i=0 ; i<ROW ;i++){
+        for(int j=0;j<COL;j++){
+            if(isIn (pathscontainer[randompathindx], i, j) == false)
+            {
+                map[i][j] = otherNumbers[otherNumbersCounterFor];
+                otherNumbersCounterFor++;
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+    cout << "Enter your map file name: ";
+    string mapName;
+    cin >> mapName;
+    ofstream output ("maps/" +mapName+ ".txt");
+    ofstream saveName ("maps/maps.txt", ios::app);
+    saveName << mapName << "\t";
+    cout << "\033[32m" << "Your map has been successfully created and saved like this: \n" << "\033[0m";
+    for (int i = 0; i < ROW; i++)
+    {
+        for (int j = 0; j < COL; j++)
+        {
+            cout << setw(3) << map[i][j] << "  ";
+            output << setw(3) << map[i][j] << "  ";
+        }
+        output << endl;
+        cout << endl;
+    }
+    cout << "Do you want to see our recommended path?\n\t1.Yes\n\t2.No\n";
+    int recommendedPath;
+    cin >> recommendedPath;
+    if (recommendedPath == 1)
+    {
+        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++){
+            cout << "(" << pathscontainer[randompathindx][i].first << "," << pathscontainer[randompathindx][i].second << ")" << " , ";
+        }
+        cout << "and the target place" << endl;
+    }
+
+}
