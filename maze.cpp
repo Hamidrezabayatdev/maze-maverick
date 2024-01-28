@@ -27,6 +27,7 @@ void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, in
 bool tekrar (int tmp);
 void hardMap (int t);
 void solveMaze (int t);
+bool zerofinder (int tmp);
 struct player
 {
     string username;
@@ -451,7 +452,7 @@ void playground (int t)
                 addHistory (dt, globalUsername, globalMapname, time1, winOrLose);
                 user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
                 user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
-                cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
+                cout << "\033[32m" << "You are succeeded" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
                 break;
             }
             else
@@ -624,7 +625,7 @@ void easyMapCreate (int t)
     }
 }
 bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy){
-    for(int i=0;i<mypath.size();i++){
+    for(int i=0; i < mypath.size(); i++){
         if(elementx == mypath[i].first && elementy == mypath[i].second)
             return true;
     }
@@ -654,19 +655,31 @@ void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, in
     path.pop_back();
 }
 bool tekrar (int tmp)
-
 {
-        for (int j = 0; j < pathscontainer[tmp].size(); j++)
+    for (int j = 0; j < pathscontainer[tmp].size(); j++)
+    {
+        for (int k = j+1; k < pathscontainer[tmp].size(); k++)
         {
-            for (int k = j+1; k < pathscontainer[tmp].size(); k++)
+            if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
             {
-                if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
-                {
-                    return false;
-                }
+                return false;
             }
         }
-        return true;
+    }
+    return true;
+}
+bool zerofinder (int i, int** map)
+{
+    for (int j = 0; j < pathscontainer[i].size(); j++)
+    {
+        // cout << map[pathscontainer[i][j].first][pathscontainer[i][j].second] << "  ";
+        if (map[pathscontainer[i][j].first][pathscontainer[i][j].second] == 0)
+        {
+            return false;
+        }
+    }
+    cout << endl;
+    return true;
 }
 void hardMap (int t)
 {
@@ -768,10 +781,22 @@ void hardMap (int t)
     cin >> recommendedPath;
     if (recommendedPath == 1)
     {
-        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++){
+        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++)
             cout << "(" << pathscontainer[randompathindx][i].first << "," << pathscontainer[randompathindx][i].second << ")" << " , ";
+        cout << "and the target place\n" << endl;
+        for (int i = 0; i < ROW; i++)
+        {
+            for (int j = 0; j < COL; j++)
+            {
+                if (isIn (pathscontainer[randompathindx], i, j) == true)
+                {
+                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                }
+                else
+                    cout << setw(3) << map[i][j] << "  ";
+            }
+            cout << endl;
         }
-        cout << "and the target place" << endl;
     }
     
 }
@@ -798,16 +823,18 @@ void solveMaze (int t)
         globalMapname = name;
 
 		string line;
- 		while (getline(inputAddress, line)) {
+ 		while (getline(inputAddress, line))
         ++row;
-        if (column == 0) {
-            column = count(line.begin(), line.end(), ' ') + 1;
-        }
-    	}
-    		int** map = new int*[row];
-    	for (int i = 0; i < row; i++){
+        int tmpForSum = 0;
+        int tmpForCol;
+        ifstream inoadd2 (address);
+        while (inoadd2 >> tmpForCol)
+            tmpForSum++;
+        column = tmpForSum/row;
+        cout << "\n row: " << row << "\t column: " << column << "\t tmpForSum: " << tmpForSum << endl;
+    	int** map = new int*[row];
+    	for (int i = 0; i < row; i++)
     	map[i] = new int[column];
-	}
     	for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < column; j++)
@@ -827,21 +854,21 @@ void solveMaze (int t)
         }
         
         vector<pair<int , int> > yourpath;
-	int ansindex;
-	findPath(0,0,yourlen, yourpath, row, column, map);
-	bool pathexists =false;
-	for(int i=0;i<pathscontainer.size();i++){
-		int temsum=0;
-		if(tekrar(i)==true){
-			for(int j=0;j<pathscontainer[i].size()-1;j++){
-				temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
-			}
-			if (temsum == map[row-1][column-1]){
-				pathexists = true;
-				ansindex = i;
-				break;
-			}
-		}
+	    int ansindex;
+	    findPath(0,0,yourlen, yourpath, row, column, map);
+	    bool pathexists =false;
+	    for(int i=0;i<pathscontainer.size();i++){
+	    	int temsum=0;
+	    	if(tekrar(i)==true){
+	    		for(int j=0;j<pathscontainer[i].size()-1;j++){
+	    			temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
+	    		}
+	    		if (temsum == map[row-1][column-1]){
+	    			pathexists = true;
+	    			ansindex = i;
+	    			break;
+	    		}
+	    	}
 	}
 	if (pathexists == false){
 		cout<<"such a path doesn't exist!\n";
@@ -882,57 +909,71 @@ void solveMaze (int t)
         int column =0;
         ifstream inputName ("maps/" +name+ ".txt");
         string line;
- 		while (getline(inputName, line)) {
-        ++row;
-        if (column == 0) {
-            column = count(line.begin(), line.end(), ' ') + 1;
-        }
-    	}
+ 		while (getline(inputName, line))
+            ++row;
+        int tmpForSum = 0;
+        int tmpForCol;
+        ifstream inoadd2 ("maps/" +name+ ".txt");
+        while (inoadd2 >> tmpForCol)
+            tmpForSum++;
+        column = tmpForSum/row;
     	int** map = new int*[row];
         for (int i = 0; i < row; i++){
         	map[i] = new int[column];
 	    }
+        ifstream sssssssss ("maps/" +name+ ".txt");
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < column; j++)
-                inputName >> map[i][j];
+                sssssssss >> map[i][j];
         }
-        
+        cout << endl;
         vector<pair<int , int> > yourpath;
-	    int ansindex;
+	    int ansindex = 1000;
 	    findPath(0,0,yourlen, yourpath, row, column, map);
 	    bool pathexists =false;
-	    for(int i=0;i<pathscontainer.size();i++){
-	    	int temsum=0;
-		if(tekrar(i)==true){
-			for(int j=0;j<pathscontainer[i].size()-1;j++){
-				temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
-			}
-			if (temsum == map[row-1][column-1]){
-				pathexists = true;
-				ansindex = i;
-				break;
-			}
-		}
-	}
-	if (pathexists == false){
-		cout<<"such a path doesn't exist!\n";
-	}
-    else
-    {
-        for (int i = 0; i < row; i++)
+        // cout << "\nps:" <<  pathscontainer.size() << endl;
+	    for(int i=0;i<pathscontainer.size();i++)
         {
-            for (int j = 0; j < column; j++)
+	    	int temsum=0;
+		    if(tekrar(i) == true){
+                if (zerofinder (i, map) == false)
+                    continue;
+                // cout << endl << "path number " << i << endl;
+		    	for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
+                    // cout << "temsum: " << temsum << "     ";
+		    	}
+                // cout << "\nghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizh" << endl;
+		    	if (temsum == map[row-1][column-1]){
+                    for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		    cout << "(" << pathscontainer[i][j].first << "," << pathscontainer[i][j].second << ") ,";
+		    	    }
+                    cout << " and the target\n";
+		    		pathexists = true;
+		    		ansindex = i;
+		    		break;
+		    	}
+		    }
+	    }
+	    if (pathexists == false){
+	    	cout << "\033[31m" << "such a path doesn't exist!" << "\033[0m\n";
+	    }
+        else
+        {
+            for (int i = 0; i < row; i++)
             {
-                if (isIn (pathscontainer[ansindex], i, j) == true)
+                for (int j = 0; j < column; j++)
                 {
-                    cout << "\033[32m" << setw(3) << map[i][j] << "  " << "\033[0m\n";
+                    if (isIn (pathscontainer[ansindex], i, j) == true)
+                    {
+                        cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                    }
+                    else
+                        cout << setw(3) << map[i][j] << "  ";
                 }
-                else
-                    cout << setw(3) << map[i][j] << "  ";
+                cout << endl;
             }
-            cout << endl;
-        }
     }
     }
     else
