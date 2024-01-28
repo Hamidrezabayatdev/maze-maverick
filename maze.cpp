@@ -615,3 +615,48 @@ void easyMapCreate (int t)
         cout << endl;
     }
 }
+bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy){
+    for(int i=0;i<mypath.size();i++){
+        if(elementx == mypath[i].first && elementy == mypath[i].second)
+            return true;
+    }
+    return false;
+}
+void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, int COL, int** map) {
+    if (x < 0 || x >= ROW || y < 0 || y >= COL || len < 0 || map[x][y] == -1) {
+        return;
+    }
+    else if (len == 0 && x == ROW - 1 && y == COL - 1) {
+        path.push_back({x, y});
+        pathscontainer.push_back(path);
+        //for (auto p : path){
+         // //  cout << "(" << p.first << ", " << p.second << ") ";
+        ////}
+        path.pop_back();
+        return;
+    }
+    path.push_back({x, y});
+    // map[x][y] = -1;
+    findPath( x + 1, y, len - 1, path, ROW, COL, map);
+    findPath( x - 1, y, len - 1, path, ROW, COL, map);
+    findPath( x, y + 1, len - 1, path, ROW, COL, map);
+    findPath( x, y - 1, len - 1, path, ROW, COL, map);
+
+    // map[x][y] = 1;
+    path.pop_back();
+}
+bool tekrar (int tmp)
+
+{
+        for (int j = 0; j < pathscontainer[tmp].size(); j++)
+        {
+            for (int k = j+1; k < pathscontainer[tmp].size(); k++)
+            {
+                if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+}
