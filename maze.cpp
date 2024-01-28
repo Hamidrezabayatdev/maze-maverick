@@ -772,23 +772,17 @@ void hardMap (int t)
 }
 void solveMaze (int t)
 {
-    int row, column, customOrImport;
-    cout << "Enter row: ";
-    cin >> row;
-    cout << "Enter column: ";
-    cin >> column;
+    int customOrImport;
     cout<<"Enter the length of the path you want: ";
 	int yourlen;
     cin>>yourlen;
     cout << "\t 1.Choose from existing maps" << endl << "\t 2.Import my custom map" << endl;
     cin >> customOrImport;
-	int** map = new int*[row];
-    for (int i = 0; i < row; i++){
-    	map[i] = new int[column];
-	}
     string globalMapname;
     if (customOrImport == 2)
     {
+    	int row = 0;
+    	int column = 0;
         string address;
         cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): \n";
         cin >> address;
@@ -797,7 +791,19 @@ void solveMaze (int t)
         string name;
         cin >> name;
         globalMapname = name;
-        for (int i = 0; i < row; i++)
+
+		string line;
+ 		while (getline(inputAddress, line)) {
+        ++row;
+        if (column == 0) {
+            column = count(line.begin(), line.end(), ' ') + 1;
+        }
+    	}
+    		int** map = new int*[row];
+    	for (int i = 0; i < row; i++){
+    	map[i] = new int[column];
+	}
+    	for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < column; j++)
                 inputAddress >> map[i][j];
@@ -814,35 +820,8 @@ void solveMaze (int t)
                     importedSave << map[i][j];
             }
         }
-    }
-    else if (customOrImport == 1)
-    {
-        ifstream mapList ("maps/maps.txt");
-        string mapListName;
-        while (mapList >> mapListName)
-            cout << mapListName << endl;
-        cout << endl << "Enter your map name (exp. Map1): ";
-        string name;
-        cin >> name;
-        while (mapcheck(name) == false)
-        {
-            cout << "\033[31m" << "Map not found!\nPlease enter an existing map" << "\033[0m\n";
-            cin >> name;
-        }
-        globalMapname = name;
-        ifstream inputName ("maps/" +name+ ".txt");
-        for (int i = 0; i < row; i++)
-        {
-            for (int j = 0; j < column; j++)
-                inputName >> map[i][j];
-        }
-    }
-    else
-    {
-        cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
-        exit(0);
-    }
-	vector<pair<int , int> > yourpath;
+        
+        vector<pair<int , int> > yourpath;
 	int ansindex;
 	findPath(0,0,yourlen, yourpath, row, column, map);
 	bool pathexists =false;
@@ -877,5 +856,83 @@ void solveMaze (int t)
             }
             cout << endl;
         }
+    }
+    }
+    else if (customOrImport == 1)
+    {
+        ifstream mapList ("maps/maps.txt");
+        string mapListName;
+        while (mapList >> mapListName)
+            cout << mapListName << endl;
+        cout << endl << "Enter your map name (exp. Map1): ";
+        string name;
+        cin >> name;
+        while (mapcheck(name) == false)
+        {
+            cout << "\033[31m" << "Map not found!\nPlease enter an existing map" << "\033[0m\n";
+            cin >> name;
+        }
+        globalMapname = name;
+        int row =0;
+        int column =0;
+        ifstream inputName ("maps/" +name+ ".txt");
+        string line;
+ 		while (getline(inputName, line)) {
+        ++row;
+        if (column == 0) {
+            column = count(line.begin(), line.end(), ' ') + 1;
+        }
+    	}
+    	int** map = new int*[row];
+        for (int i = 0; i < row; i++){
+        	map[i] = new int[column];
+	    }
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+                inputName >> map[i][j];
+        }
+        
+        vector<pair<int , int> > yourpath;
+	    int ansindex;
+	    findPath(0,0,yourlen, yourpath, row, column, map);
+	    bool pathexists =false;
+	    for(int i=0;i<pathscontainer.size();i++){
+	    	int temsum=0;
+		if(tekrar(i)==true){
+			for(int j=0;j<pathscontainer[i].size()-1;j++){
+				temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
+			}
+			if (temsum == map[row-1][column-1]){
+				pathexists = true;
+				ansindex = i;
+				break;
+			}
+		}
+	}
+	if (pathexists == false){
+		cout<<"such a path doesn't exist!\n";
+	}
+    else
+    {
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+            {
+                if (isIn (pathscontainer[ansindex], i, j) == true)
+                {
+                    cout << "\033[32m" << setw(3) << map[i][j] << "  " << "\033[0m\n";
+                }
+                else
+                    cout << setw(3) << map[i][j] << "  ";
+            }
+            cout << endl;
+        }
+    }
+    }
+    else
+    {
+        cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
+        exit(0);
     }
 }

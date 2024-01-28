@@ -1,0 +1,6 @@
+3 2 9 17
+
+All games: 3
+Wins: 2
+Final win time: 9s
+All games time: 17s
