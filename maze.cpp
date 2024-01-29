@@ -26,6 +26,8 @@ bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy );
 void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, int COL, int** map);
 bool tekrar (int tmp);
 void hardMap (int t);
+void solveMaze (int t);
+bool zerofinder (int tmp);
 struct player
 {
     string username;
@@ -52,55 +54,8 @@ int main()
         }
         else if (mode == 2)
             playground(2);
-        else if (mode==3){
-        	cout<<"1.choose from existing maps\n2.import a custom map"<<endl;
-        	int userinput ;
-        	cin>>userinput;
-        	if(userinput == 1){
-
-			}
-			else if(userinput ==2){
-				int m , n;
-				cout<<"enter the dimension of your custom map"<<endl;
-				cin>>m>>n;
-				cout<<"enter the length of the path you want"<<endl;
-				int yourlen ;
-				cin>>yourlen;
-				int** yourmap = new int*[m];
-    			for (int i = 0; i < m; i++){
-    				yourmap[i] = new int[n];
-				}
-
-				cout<<"initialize the map elements in order"<<endl;
-				for(int i=0;i<m;i++){
-					for(int j=0;j<n;j++){
-						cin>>yourmap[i][j];
-					}
-				}
-				vector<pair<int , int> > yourpath;
-				int ansindex ;
-				findPath(0,0,yourlen, yourpath, m, n, yourmap);
-				bool pathexists =false;
-				for(int i=0;i<pathscontainer.size();i++){
-					int temsum=0;
-					if(tekrar(i)==true){
-						for(int j=0;j<pathscontainer[i].size()-1;j++){
-							temsum+=yourmap[pathscontainer[i][j].first][pathscontainer[i][j].second];
-						}
-						if (temsum == yourmap[m-1][n-1]){
-							pathexists = true;
-							ansindex = i;
-							break;
-
-						}
-					}
-				}
-				if (pathexists == false){
-					cout<<"such a path doesn't exist!"<<endl;
-				}
-
-			}
-		}
+        else if (mode == 3)
+            solveMaze (2);
         else if (mode == 4)
             showHistory(2);
         else if (mode == 5)
@@ -168,7 +123,7 @@ bool customsort (player& a, player& b)
         return a.wins > b.wins;
     else
         return a.time < b.time;
-
+    
 }
 void addHistory (char* dt, string globalUsername, string globalMapname, int time1, bool winOrLose)
 {
@@ -228,6 +183,11 @@ void playground (int t)
         cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): \n";
         cin >> address;
         ifstream inputAddress (address);
+        if (inputAddress.fail())
+        {
+            cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
+            return;
+        }
         cout << endl << "Enter your map Name (exp. Map1): ";
         string name;
         cin >> name;
@@ -248,6 +208,8 @@ void playground (int t)
                 for (int j = 0; j < column; j++)
                     importedSave << map[i][j];
             }
+            ofstream saveName ("maps/maps.txt", ios::app);
+            saveName << name << "\t";
         }
     }
     else if (customOrImport == 1)
@@ -275,9 +237,9 @@ void playground (int t)
     else
     {
         cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
-        exit(0);
+        return;
     }
-    cout << "do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No\n";
+    cout << "\033[36m" << "Do you have a profile in this game?" << "\n\t 1.Yes \n\t 2.No" << "\033[0m\n";
     int profile;
     cin >> profile;
     string globalUsername;
@@ -317,7 +279,7 @@ void playground (int t)
     int timeBase = time(0), time1, sumTime;
     cout << "\033[36m" << "Valid inputs:\n\tW for up\n\tS for down\n\tA for left\n\tD for right\n\tB for back\n\tT for time\n\tE for end or give up!\nL for movelist" << "\033[0m\n\n";
     cout << "\033[33m" << "Time started" << "\033[0m\n";
-    time_t now = time(0); // get current dat/time with respect to system
+    time_t now = time(0); // get current dat/time with respect to system  
     char* dt = ctime(&now); // convert it into string
     for (int i = 0; i < row; i++)
     {
@@ -345,42 +307,42 @@ void playground (int t)
         cin >> move;
         time1 = time(0) - timeBase;
         sumTime += time1;
-        if (move == 'B')
+        if (move == 'B' || move == 'b')
         {
             if (moves[moves.size()-1] == 'G')
             {
                 cout << "\033[31m" << "You can't go back at the first place" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'D')
+            else if (moves[moves.size()-1] == 'D' || moves[moves.size()-1] == 'd')
             {
                 y --;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'A')
+            else if (moves[moves.size()-1] == 'A' || moves[moves.size()-1] == 'a')
             {
                 y ++;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'S')
+            else if (moves[moves.size()-1] == 'S' || moves[moves.size()-1] == 's')
             {
                 x --;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
-            else if (moves[moves.size()-1] == 'W')
+            else if (moves[moves.size()-1] == 'W' || moves[moves.size()-1] == 'w')
             {
                 x ++;
                 popbacks (xHolder, yHolder, moves);
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-
-        else if (move == 'D')
+        
+        else if (move == 'D' || move == 'd')
         {
-            if (y == column-1 || moves[moves.size()-1] == 'A')
+            if (y == column-1 || moves[moves.size()-1] == 'A' || moves[moves.size()-1] == 'a')
                 continue;
             else if ((map[x][y+1] == 0))
             {
@@ -402,7 +364,7 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'A')
+        else if (move == 'A' || move == 'a')
         {
             if (y == 0)
                 continue;
@@ -411,7 +373,7 @@ void playground (int t)
                 cout << "\033[31m" << "There is a block on your left side" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'D')
+            else if (moves[moves.size()-1] == 'D' || moves[moves.size()-1] == 'd')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
@@ -423,16 +385,16 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'S')
+        else if (move == 'S' || move == 's')
         {
             if (x == row-1)
                 continue;
-            else if (moves[moves.size()-1] == 'W')
+            else if (moves[moves.size()-1] == 'W' || moves[moves.size()-1] == 'w')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
             }
-
+            
             else if ((map[x+1][y] == 0))
             {
                 if (x == row-2 && y == column-1)
@@ -443,7 +405,7 @@ void playground (int t)
                 }
                 else
                 {
-                    cout << "\033[31m" << "There is a block on down there" << "\033[0m\n";
+                    cout << "\033[31m" << "There is a block down there" << "\033[0m\n";
                     continue;
                 }
             }
@@ -454,21 +416,21 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'W')
+        else if (move == 'W' || move == 'w')
         {
             if (x == 0)
                 continue;
             else if (map[x-1][y] == 0)
             {
-                cout << "\033[31m" << "There is a block on up there" << "\033[0m\n";
+                cout << "\033[31m" << "There is a block up there" << "\033[0m\n";
                 continue;
             }
-            else if (moves[moves.size()-1] == 'S')
+            else if (moves[moves.size()-1] == 'S' || moves[moves.size()-1] == 's')
             {
                 cout << "\033[36m" << "If you want to go backward, press 'B'" << "\033[0m\n";
                 continue;
             }
-
+            
             else
             {
                 x --;
@@ -476,11 +438,11 @@ void playground (int t)
                 printMap(row, column, xHolder, yHolder, map);
             }
         }
-        else if (move == 'T')
+        else if (move == 'T' || move == 't')
         {
             cout << "\033[33m" << "time = " << time1 << "s" << "\033[0m\n";
         }
-        else if (move == 'E')
+        else if (move == 'E' || move == 'e')
         {
             if (winningState(row, column, xHolder, yHolder, map) == true)
             {
@@ -492,7 +454,7 @@ void playground (int t)
                 addHistory (dt, globalUsername, globalMapname, time1, winOrLose);
                 user << allGames << " " << wins << " " << finalWinTime << " " << allTime << "\n\n";
                 user << "All games: " << allGames << "\nWins: " << wins << "\nFinal win time: " << finalWinTime << "s" << "\nAll games time: " << allTime << "s" << endl;
-                cout << "\033[32m" << "You are succeed" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
+                cout << "\033[32m" << "You are succeeded" << "\033[0m" << endl << "time = " << time1 << "s" << endl << "Game ended" << endl;
                 break;
             }
             else
@@ -516,7 +478,7 @@ void playground (int t)
                 }
             }
         }
-        else if (move == 'L')
+        else if (move == 'L' || move == 'l')
         {
             cout << "\033[36m" << "Valid inputs:\n\tW for up\n\tS for down\n\tA for left\n\tD for right\n\tB for back\n\tT for time\n\tE for end or give up!" << "\033[0m\n";
         }
@@ -642,7 +604,7 @@ void easyMapCreate (int t)
             {
                 map[i][j] = otherNumbers[otherNumbersCounter];
                 otherNumbersCounter++;
-            }
+            } 
         }
     }
     cout << "Enter your map file name: ";
@@ -665,7 +627,7 @@ void easyMapCreate (int t)
     }
 }
 bool isIn (vector<pair<int,int> >& mypath , int elementx, int elementy){
-    for(int i=0;i<mypath.size();i++){
+    for(int i=0; i < mypath.size(); i++){
         if(elementx == mypath[i].first && elementy == mypath[i].second)
             return true;
     }
@@ -695,19 +657,31 @@ void findPath( int x, int y, int len, vector<pair<int, int> >& path, int ROW, in
     path.pop_back();
 }
 bool tekrar (int tmp)
-
 {
-        for (int j = 0; j < pathscontainer[tmp].size(); j++)
+    for (int j = 0; j < pathscontainer[tmp].size(); j++)
+    {
+        for (int k = j+1; k < pathscontainer[tmp].size(); k++)
         {
-            for (int k = j+1; k < pathscontainer[tmp].size(); k++)
+            if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
             {
-                if (pathscontainer[tmp][j].first == pathscontainer[tmp][k].first && pathscontainer[tmp][j].second == pathscontainer[tmp][k].second)
-                {
-                    return false;
-                }
+                return false;
             }
         }
-        return true;
+    }
+    return true;
+}
+bool zerofinder (int i, int** map)
+{
+    for (int j = 0; j < pathscontainer[i].size(); j++)
+    {
+        // cout << map[pathscontainer[i][j].first][pathscontainer[i][j].second] << "  ";
+        if (map[pathscontainer[i][j].first][pathscontainer[i][j].second] == 0)
+        {
+            return false;
+        }
+    }
+    cout << endl;
+    return true;
 }
 void hardMap (int t)
 {
@@ -751,7 +725,7 @@ void hardMap (int t)
             while (otherNumbers[i] == 0)
             {
                 otherNumbers[i] = rand()%(Au - Al + 1) + Al;
-            }
+            }  
     }
     random_shuffle(otherNumbers.begin(), otherNumbers.end());
     findPath( 0, 0, len, path, ROW, COL, map);
@@ -770,9 +744,9 @@ void hardMap (int t)
         s+= map[pathscontainer[randompathindx][i].first][pathscontainer[randompathindx][i].second];
     }
     map[ROW - 1][COL - 1] = s;
-    for(int i=0; i<pathscontainer[randompathindx].size(); i++){
-        cout << pathscontainer[randompathindx][i].first << "  " << pathscontainer[randompathindx][i].second << endl;
-    }
+    // for(int i=0; i<pathscontainer[randompathindx].size(); i++){
+    //     cout << pathscontainer[randompathindx][i].first << "  " << pathscontainer[randompathindx][i].second << endl;
+    // }
     int otherNumbersCounterFor = 0;
     for(int i=0 ; i<ROW ;i++){
         for(int j=0;j<COL;j++){
@@ -809,10 +783,218 @@ void hardMap (int t)
     cin >> recommendedPath;
     if (recommendedPath == 1)
     {
-        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++){
-            cout << "(" << pathscontainer[randompathindx][i].first << "," << pathscontainer[randompathindx][i].second << ")" << " , ";
+        for(int i=0; i<pathscontainer[randompathindx].size()-1; i++)
+            cout << "(" << pathscontainer[randompathindx][i].first+1 << "," << pathscontainer[randompathindx][i].second+1 << ")" << " , ";
+        cout << "and the target place\n" << endl;
+        for (int i = 0; i < ROW; i++)
+        {
+            for (int j = 0; j < COL; j++)
+            {
+                if (isIn (pathscontainer[randompathindx], i, j) == true)
+                {
+                    cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                }
+                else
+                    cout << setw(3) << map[i][j] << "  ";
+            }
+            cout << endl;
         }
-        cout << "and the target place" << endl;
     }
-
+    
 }
+void solveMaze (int t)
+{
+    int customOrImport;
+    cout << "\t 1.Choose from existing maps" << endl << "\t 2.Import my custom map" << endl;
+    cin >> customOrImport;
+    string globalMapname;
+    if (customOrImport == 2)
+    {
+    	int row = 0;
+    	int column = 0;
+        string address;
+        cout << endl << "Enter your map file address (exp. ././maps/mymap.txt): \n";
+        cin >> address;
+        ifstream inputAddress (address);
+        cout << endl << "Enter your map name (exp. Map1): ";
+        string name;
+        cin >> name;
+        globalMapname = name;
+		string line;
+ 		while (getline(inputAddress, line))
+        ++row;
+        int tmpForSum = 0;
+        int tmpForCol;
+        ifstream inoadd2 (address);
+        while (inoadd2 >> tmpForCol)
+            tmpForSum++;
+        column = tmpForSum/row;
+        // cout << "\n row: " << row << "\t column: " << column << "\t tmpForSum: " << tmpForSum << endl;
+    	int** map = new int*[row];
+    	for (int i = 0; i < row; i++)
+    	map[i] = new int[column];
+    	ifstream sssssssss (address);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+                sssssssss >> map[i][j];
+        }
+        cout<<"Enter the length of the path you want: ";
+	    int yourlen;
+        cin>>yourlen;
+        cout << "\033[36m" << "Do you want to save your map in this game?\n\t1.Yes\n\t2.No" << "\033[0m\n";
+        int mapSave;
+        cin >> mapSave;
+        if (mapSave == 1)
+        {
+            ofstream importedSave ("maps/" +name+ ".txt");
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                    importedSave << map[i][j];
+            }
+            ofstream saveName ("maps/maps.txt", ios::app);
+            saveName << name << "\t";
+        }
+        vector<pair<int , int> > yourpath;
+	    int ansindex;
+	    findPath(0,0,yourlen, yourpath, row, column, map);
+	    bool pathexists =false;
+	    for(int i=0;i<pathscontainer.size();i++)
+        {
+	    	int temsum=0;
+		    if(tekrar(i) == true){
+                if (zerofinder (i, map) == false)
+                    continue;
+                // cout << endl << "path number " << i << endl;
+		    	for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
+                    // cout << "temsum: " << temsum << "     ";
+		    	}
+                // cout << "\nghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizh" << endl;
+		    	if (temsum == map[row-1][column-1]){
+                    for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		    cout << "(" << pathscontainer[i][j].first << "," << pathscontainer[i][j].second << ") ,";
+		    	    }
+                    cout << " and the target\n";
+		    		pathexists = true;
+		    		ansindex = i;
+		    		break;
+		    	}
+		    }
+	    }
+	    if (pathexists == false){
+	    	cout << "\033[31m" << "such a path doesn't exist!" << "\033[0m\n";
+	    }
+        else
+        {
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    if (isIn (pathscontainer[ansindex], i, j) == true)
+                    {
+                        cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                    }
+                    else
+                        cout << setw(3) << map[i][j] << "  ";
+                }
+                cout << endl;
+            }
+        }
+    }
+    else if (customOrImport == 1)
+    {
+        ifstream mapList ("maps/maps.txt");
+        string mapListName;
+        while (mapList >> mapListName)
+            cout << mapListName << endl;
+        cout << endl << "Enter your map name (exp. Map1): ";
+        string name;
+        cin >> name;
+        while (mapcheck(name) == false)
+        {
+            cout << "\033[31m" << "Map not found!\nPlease enter an existing map" << "\033[0m\n";
+            cin >> name;
+        }
+        cout<<"Enter the length of the path you want: ";
+	    int yourlen;
+        cin>>yourlen;
+        globalMapname = name;
+        int row =0;
+        int column =0;
+        ifstream inputName ("maps/" +name+ ".txt");
+        string line;
+ 		while (getline(inputName, line))
+            ++row;
+        int tmpForSum = 0;
+        int tmpForCol;
+        ifstream inoadd2 ("maps/" +name+ ".txt");
+        while (inoadd2 >> tmpForCol)
+            tmpForSum++;
+        column = tmpForSum/row;
+    	int** map = new int*[row];
+        for (int i = 0; i < row; i++){
+        	map[i] = new int[column];
+	    }
+        ifstream sssssssss ("maps/" +name+ ".txt");
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+                sssssssss >> map[i][j];
+        }
+        vector<pair<int , int> > yourpath;
+	    int ansindex = 1000;
+	    findPath(0,0,yourlen, yourpath, row, column, map);
+	    bool pathexists =false;
+        // cout << "\nps:" <<  pathscontainer.size() << endl;
+	    for(int i=0;i<pathscontainer.size();i++)
+        {
+	    	int temsum=0;
+		    if(tekrar(i) == true){
+                if (zerofinder (i, map) == false)
+                    continue;
+                // cout << endl << "path number " << i << endl;
+		    	for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		temsum+=map[pathscontainer[i][j].first][pathscontainer[i][j].second];
+                    // cout << "temsum: " << temsum << "     ";
+		    	}
+                // cout << "\nghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizhghizh" << endl;
+		    	if (temsum == map[row-1][column-1]){
+                    for(int j=0;j<pathscontainer[i].size()-1;j++){
+		    		    cout << "(" << pathscontainer[i][j].first+1 << "," << pathscontainer[i][j].second+1 << ") ,";
+		    	    }
+                    cout << " and the target\n";
+		    		pathexists = true;
+		    		ansindex = i;
+		    		break;
+		    	}
+		    }
+	    }
+	    if (pathexists == false){
+	    	cout << "\033[31m" << "such a path doesn't exist!" << "\033[0m\n";
+	    }
+        else
+        {
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    if (isIn (pathscontainer[ansindex], i, j) == true)
+                    {
+                        cout << "\033[32m" << setw(3) <<  map[i][j] << "\033[0m" << "  ";
+                    }
+                    else
+                        cout << setw(3) << map[i][j] << "  ";
+                }
+                cout << endl;
+            }
+        }
+    }
+    else
+    {
+        cout << "\033[31m" << "Invalid input, please start again" << "\033[0m" << endl;
+        exit(0);
+    }
+}
+// the end
